@@ -13,15 +13,23 @@ const App: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-black">
       <Navbar />
-      
+
       <main className="flex-grow">
         <Hero />
-        
+
         <section className="py-12 bg-black overflow-hidden">
           <div className="container mx-auto px-4 mb-8 text-center">
-            <p className="text-gray-400 text-sm tracking-widest uppercase mb-4">Trusted by the World's Leading Tech Innovators</p>
+            <p className="text-gray-400 text-sm tracking-widest uppercase mb-4">Platforms We Build With</p>
+            <p className="text-gray-500 text-sm max-w-2xl mx-auto mb-4">
+              We design and deploy automations using modern, battle-tested AI and workflow platforms.
+            </p>
           </div>
           <LogoCarousel />
+          <div className="container mx-auto px-4 mt-8 text-center">
+            <p className="text-zinc-800 text-[10px] uppercase tracking-wider">
+              Logos are trademarks of their respective owners. No official affiliation or endorsement is implied.
+            </p>
+          </div>
         </section>
 
         <section id="solutions" className="py-24 bg-zinc-950">
@@ -42,7 +50,7 @@ const App: React.FC = () => {
       </main>
 
       <Footer />
-      
+
       {/* Sticky Call to Action for Mobile */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-black/80 backdrop-blur-lg border-t border-zinc-800 z-50">
         <button className="w-full bg-white text-black font-bold py-4 rounded-full shadow-lg active:scale-95 transition-transform">
