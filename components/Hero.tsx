@@ -1,0 +1,84 @@
+
+import React from 'react';
+
+const Hero: React.FC = () => {
+  return (
+    <section className="relative min-h-[90vh] flex items-center pt-24 overflow-hidden">
+      {/* Dynamic Background Elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-cyan-900/20 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-900/20 rounded-full blur-[120px] animate-pulse delay-700"></div>
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '40px 40px'}}></div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+        {/* Left Content */}
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs font-medium tracking-widest text-cyan-400 uppercase mb-8">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+            </span>
+            <span>Intelligence Redefined</span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tighter mb-8 text-glow-white">
+            Train and Deploy <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-zinc-500">Industry-Leading</span> AI Excellence.
+          </h1>
+          <p className="text-xl text-gray-400 font-poppins leading-relaxed mb-10 max-w-2xl">
+            Data and AI are inextricably linked. We bring decades of domain expertise to your most ambitious AI initiatives. The future is built on Epiphany.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button className="px-10 py-5 bg-white text-black font-bold rounded-full hover:bg-cyan-400 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] active:scale-95 text-lg">
+              GET STARTED
+            </button>
+            <button className="px-10 py-5 border border-zinc-700 text-white font-bold rounded-full hover:bg-zinc-900 transition-all active:scale-95 text-lg flex items-center justify-center space-x-2">
+              <span>EXPLORE PLATFORM</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Right Content - Abstract Tech Visual */}
+        <div className="relative flex justify-center items-center">
+          <div className="relative w-full max-w-md aspect-square">
+            {/* The Stylized '1' / Bolt Logo from description */}
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-3xl opacity-50 animate-pulse"></div>
+            <div className="relative z-10 w-full h-full border border-zinc-800 rounded-2xl bg-zinc-900/30 backdrop-blur-sm p-12 flex items-center justify-center group overflow-hidden">
+               <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.4)]">
+                 <defs>
+                   <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                     <stop offset="0%" stopColor="#fff" />
+                     <stop offset="100%" stopColor="#888" />
+                   </linearGradient>
+                 </defs>
+                 <path d="M70 20 L130 20 L160 180 L130 180 L115 120 L70 180 L40 180 L100 20 Z" fill="url(#logoGrad)" />
+                 {/* Circuit lines */}
+                 <g stroke="#fff" strokeWidth="0.5" fill="none" opacity="0.6">
+                   <path d="M50 40 H30 M45 60 H20 M55 80 H25 M40 100 H15" className="animate-pulse" />
+                   <path d="M150 40 H170 M155 60 H180 M145 80 H175 M160 100 H185" className="animate-pulse delay-500" />
+                 </g>
+                 {/* Glowing nodes */}
+                 <circle cx="25" cy="40" r="2" fill="cyan" className="animate-ping" />
+                 <circle cx="15" cy="100" r="2" fill="white" className="animate-ping delay-300" />
+                 <circle cx="185" cy="100" r="2" fill="cyan" className="animate-ping delay-700" />
+               </svg>
+            </div>
+            
+            {/* Animated float items */}
+            <div className="absolute -top-6 -right-6 bg-zinc-900 border border-zinc-800 p-4 rounded-xl shadow-2xl animate-bounce duration-[3000ms]">
+               <div className="text-xs text-gray-500 uppercase tracking-tighter mb-1">Model Accuracy</div>
+               <div className="text-2xl font-bold text-cyan-400">99.8%</div>
+            </div>
+            <div className="absolute bottom-10 -left-10 bg-zinc-900 border border-zinc-800 p-4 rounded-xl shadow-2xl animate-bounce duration-[4000ms] delay-1000">
+               <div className="text-xs text-gray-500 uppercase tracking-tighter mb-1">Data Processed</div>
+               <div className="text-2xl font-bold text-white">4.2PB</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
