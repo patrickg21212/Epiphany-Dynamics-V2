@@ -16,58 +16,68 @@ type Category = {
 
 const categories: Category[] = [
   {
-    id: 'gen-ai',
-    name: 'Generative AI',
-    icon: '✨',
+    id: 'agents',
+    name: 'AI Agents & Automations',
+    icon: '🤖',
     items: [
       {
-        title: 'Supervised Fine-Tuning',
-        description: 'Develop specialized data to train and refine pre-trained models for custom task taxonomies. We build high-quality golden datasets for peak performance.',
-        cta: 'LEARN MORE'
+        title: 'Intelligent Autonomous Agents',
+        description: 'Deploy smart agents that handle complex, multi-step workflows without human intervention. We replace manual tasks with reliable, 24/7 AI workers.',
+        cta: 'DEPLOY AGENTS'
       },
       {
-        title: 'Model Safety & Red Teaming',
-        description: 'Rigorously test and optimize models to ensure compliance and safety. We identify vulnerabilities and improve robustness against adversarial attacks.',
-        cta: 'PROTECT YOUR MODELS'
+        title: 'End-to-End Automation',
+        description: 'Automate entire business processes from trigger to resolution. Eliminate bottlenecks and repetitive data entry with robust, self-healing systems.',
+        cta: 'STREAMLINE OPS'
       },
       {
-        title: 'RLHF & Optimization',
-        description: 'Leverage Reinforcement Learning from Human Feedback to reduce hallucinations and align model outputs with human intent and preference.',
-        cta: 'OPTIMIZE OUTPUTS'
+        title: 'Sales & Support Scaling',
+        description: 'Qualify leads and resolve support tickets instantly. Deliver personalized, human-quality interactions at infinite scale, around the clock.',
+        cta: 'SCALE REVENUE'
       }
     ]
   },
   {
-    id: 'trad-ai',
-    name: 'Traditional AI',
-    icon: '📊',
+    id: 'integrations',
+    name: 'Workflow Integrations',
+    icon: '⚡',
     items: [
       {
-        title: 'Data Annotation',
-        description: 'Human-in-the-loop annotation for image, video, text, and sensor data. Achieve 99.9% accuracy with our global team of subject matter experts.',
-        cta: 'START ANNOTATING'
+        title: 'Seamless Tool Stacks',
+        description: 'Connect your existing software ecosystem (CRM, ERP, Slack). We integrate directly with your tools to orchestrate data flow securely.',
+        cta: 'CONNECT TOOLS'
       },
       {
-        title: 'Dataset Creation',
-        description: 'Custom dataset sourcing and generation tailored to specific industry needs, including healthcare, finance, and legal domains.',
-        cta: 'BUILD DATASETS'
+        title: 'Data Pipeline Security',
+        description: 'Securely handle sensitive business data with enterprise-grade governance. We build reliable pipes that keep your information safe and compliant.',
+        cta: 'SECURE DATA'
+      },
+      {
+        title: 'Reliability & Maintenance',
+        description: "Automation isn't a one-time setup. We provide ongoing monitoring and updates to ensure your workflows adapt to API changes and growth.",
+        cta: 'ENSURE UPTIME'
       }
     ]
   },
   {
-    id: 'enterprise',
-    name: 'Enterprise Strategy',
-    icon: '🏢',
+    id: 'apps',
+    name: 'LLM Apps & Internal Tools',
+    icon: '🛠️',
     items: [
       {
-        title: 'AI Consulting',
-        description: 'Strategic roadmaps for AI adoption. We help identify high-impact use cases and define person-machine synergy within your organization.',
-        cta: 'TALK TO AN EXPERT'
+        title: 'Custom Internal AI Apps',
+        description: 'Empower your workforce with purpose-built AI interfaces. Streamline specific operational tasks with tools designed for your unique needs.',
+        cta: 'EMPOWER TEAMS'
       },
       {
-        title: 'Managed Services',
-        description: 'End-to-end management of your AI lifecycle, from data prep to model deployment and monitoring at enterprise scale.',
-        cta: 'SCALE YOUR OPS'
+        title: 'Knowledge Retrieval',
+        description: 'Turn your company documentation and data into an interactive answer engine. Instant access to proprietary knowledge for every employee.',
+        cta: 'UNLOCK KNOWLEDGE'
+      },
+      {
+        title: 'High-ROI Operations',
+        description: 'We focus on high-impact implementations that deliver immediate value. Track time saved and efficiency gained with clear performance metrics.',
+        cta: 'VIEW METRICS'
       }
     ]
   }
@@ -89,11 +99,10 @@ const Solutions: React.FC = () => {
           <button
             key={cat.id}
             onClick={() => setActiveCat(cat.id)}
-            className={`px-8 py-4 rounded-full text-sm font-bold tracking-wider transition-all border ${
-              activeCat === cat.id 
-              ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.15)]' 
+            className={`px-8 py-4 rounded-full text-sm font-bold tracking-wider transition-all border ${activeCat === cat.id
+              ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.15)]'
               : 'bg-transparent text-gray-400 border-zinc-800 hover:border-zinc-600'
-            }`}
+              }`}
           >
             <span className="mr-2">{cat.icon}</span>
             {cat.name.toUpperCase()}
@@ -103,12 +112,12 @@ const Solutions: React.FC = () => {
 
       <div className="grid md:grid-cols-3 gap-8 animate-fadeIn">
         {currentCategory.items.map((item, idx) => (
-          <div 
-            key={idx} 
+          <div
+            key={idx}
             className="group relative p-8 bg-zinc-900 border border-zinc-800 rounded-3xl hover:border-cyan-500/50 transition-all duration-500 flex flex-col h-full"
           >
             <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-               <svg className="w-6 h-6 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+              <svg className="w-6 h-6 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </div>
             <h3 className="text-2xl font-bold mb-4 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
             <p className="text-gray-400 font-poppins leading-relaxed mb-8 flex-grow">{item.description}</p>
@@ -121,11 +130,11 @@ const Solutions: React.FC = () => {
 
       <div className="mt-20 p-12 bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 rounded-[2rem] flex flex-col lg:flex-row items-center justify-between gap-8">
         <div className="max-w-xl">
-           <h4 className="text-3xl font-bold mb-4">Ready to accelerate your AI journey?</h4>
-           <p className="text-gray-400 font-poppins">Our team of 5,000+ subject matter experts is ready to support your most complex data challenges.</p>
+          <h4 className="text-3xl font-bold mb-4">Ready to Automate Real Work with AI?</h4>
+          <p className="text-gray-400 font-poppins">We design and deploy custom AI automations and agent workflows tailored to your existing tools, data, and processes.</p>
         </div>
         <button className="px-12 py-5 bg-cyan-500 text-black font-black rounded-full hover:bg-white transition-all shadow-lg active:scale-95 whitespace-nowrap">
-          GET A CUSTOM QUOTE
+          Book an Automation Strategy Call
         </button>
       </div>
     </div>

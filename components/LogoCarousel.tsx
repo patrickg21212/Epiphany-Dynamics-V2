@@ -53,14 +53,18 @@ const LogoCarousel: React.FC = () => {
     {
       name: 'Outlook',
       icon: <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Microsoft_Office_Outlook_%282018%E2%80%932024%29.svg" alt="Microsoft Outlook" className="h-8 w-auto object-contain opacity-90" />
+    },
+    {
+      name: 'GitHub',
+      icon: <img src="/logos/github-logo-white.png" alt="GitHub" className="h-8 w-auto object-contain opacity-90" />
     }
   ];
 
   return (
     <div className="relative w-full overflow-hidden mask-linear-fade">
-      <div className="flex animate-infinite-scroll space-x-16 items-center w-max hover:pause">
+      <div className="flex animate-infinite-scroll space-x-12 items-center w-max hover:pause">
         {[...platforms, ...platforms].map((platform, idx) => (
-          <div key={idx} className="flex items-center justify-center opacity-80 hover:opacity-100 transition-all duration-300 w-32 group select-none">
+          <div key={idx} className="flex items-center justify-center opacity-80 hover:opacity-100 transition-all duration-300 w-24 group select-none">
             <div className="flex items-center justify-center" title={platform.name}>
               {platform.icon}
             </div>
