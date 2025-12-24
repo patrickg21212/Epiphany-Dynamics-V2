@@ -35,10 +35,7 @@ const CaseStudies: React.FC = () => {
           <p className="text-cyan-500 font-bold tracking-widest text-sm mb-4">PROVEN RESULTS</p>
           <h2 className="text-5xl font-bold tracking-tight">Real-World Operational Impact</h2>
         </div>
-        <button className="hidden md:flex items-center space-x-2 text-white font-bold border-b border-white pb-1 hover:text-cyan-400 hover:border-cyan-400 transition-all">
-          <span>VIEW ALL CASE STUDIES</span>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-        </button>
+
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">

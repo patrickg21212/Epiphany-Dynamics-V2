@@ -1,11 +1,16 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type SolutionItem = {
   title: string;
   description: string;
   cta: string;
 };
+
+// ... (existing types and categories array remain, I will just show the top part)
+
+// I will just replace the top up to the component start to fix the imports
+
 
 type Category = {
   id: string;
@@ -83,7 +88,10 @@ const categories: Category[] = [
   }
 ];
 
+
+
 const Solutions: React.FC = () => {
+  const navigate = useNavigate();
   const [activeCat, setActiveCat] = useState(categories[0].id);
   const currentCategory = categories.find(c => c.id === activeCat)!;
 
@@ -133,8 +141,8 @@ const Solutions: React.FC = () => {
           <h4 className="text-3xl font-bold mb-4">Ready to Automate Real Work with AI?</h4>
           <p className="text-gray-400 font-poppins">We design and deploy custom AI automations and agent workflows tailored to your existing tools, data, and processes.</p>
         </div>
-        <button className="px-12 py-5 bg-cyan-500 text-black font-black rounded-full hover:bg-white transition-all shadow-lg active:scale-95 whitespace-nowrap">
-          Book an Automation Strategy Call
+        <button onClick={() => navigate('/workflow-review')} className="px-12 py-5 bg-cyan-500 text-black font-black rounded-full hover:bg-white transition-all shadow-lg active:scale-95 whitespace-nowrap">
+          Request a Workflow Review
         </button>
       </div>
     </div>
