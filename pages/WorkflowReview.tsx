@@ -1,0 +1,206 @@
+import React, { useState, useEffect } from 'react';
+
+const WorkflowReview: React.FC = () => {
+    const [submitted, setSubmitted] = useState(false);
+    const [formData, setFormData] = useState({
+        industry: '',
+        mainProblem: '',
+        leadsPerMonth: '',
+        breakdown: ''
+    });
+
+    useEffect(() => {
+        if (submitted) {
+            const script = document.createElement("script");
+            script.src = "https://assets.calendly.com/assets/external/widget.js";
+            script.async = true;
+            document.body.appendChild(script);
+            return () => {
+                // Optional cleanup if needed, though usually fine to leave for navigation
+                if (document.body.contains(script)) {
+                    document.body.removeChild(script);
+                }
+            };
+        }
+    }, [submitted]);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Logic to handle submission could go here (e.g. API call), 
+        // but requirement is just to show confirmation state.
+        setSubmitted(true);
+        // Scroll to top to ensure message is seen
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleChange = (field: string, value: string) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+    };
+
+    if (submitted) {
+        return (
+            <div className="pt-32 pb-24 bg-black min-h-screen">
+                <div className="container mx-auto px-6 max-w-4xl text-center animate-fadeIn">
+                    <div className="p-8 border border-zinc-800 rounded-3xl bg-zinc-900/30 mb-8 max-w-2xl mx-auto">
+                        <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <h2 className="text-2xl font-bold text-white mb-4">Thanks — this helps us prepare so we don’t waste your time.</h2>
+                        <p className="text-gray-400">Go ahead and schedule your workflow review below.</p>
+                    </div>
+
+                    {/* Calendly Inline Widget */}
+                    <div
+                        className="calendly-inline-widget w-full h-[700px] border border-zinc-800 rounded-2xl overflow-hidden bg-zinc-900"
+                        data-url="https://calendly.com/epiphanydynamics/ai-workflow-audit-call?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=06b6d4"
+                        style={{ minWidth: '320px', height: '700px' }}
+                    ></div>
+
+                    {/* Optional Intake Step */}
+                    <div className="mt-8 p-6 border border-zinc-800 rounded-2xl bg-zinc-900/30">
+                        <h3 className="text-white font-bold mb-2">Optional: Help Us Prepare</h3>
+                        <p className="text-gray-400 text-sm mb-4">
+                            If you have 2 minutes, answer a few questions so we can make your workflow review more useful. If you’re busy, you can skip this.
+                        </p>
+                        <a
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSdV-Iet3PQKHFchj-qFNeIn_BVvrQS0mudOOfsDFdFvOFoXIg/viewform"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block px-6 py-3 bg-zinc-800 text-white font-medium rounded-full hover:bg-zinc-700 transition-colors text-sm border border-zinc-700"
+                        >
+                            Complete Optional Pre-Call Intake
+                        </a>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="pt-32 pb-24 bg-black min-h-screen">
+            <div className="container mx-auto px-6 max-w-2xl">
+                <div className="text-center mb-10">
+                    <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">Request a Workflow Review</h1>
+                    <p className="text-gray-400">
+                        Answer a few quick questions so we can prepare and make the review useful.
+                    </p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-8 p-8 border border-zinc-800 rounded-3xl bg-zinc-900/20">
+
+                    {/* Question 1: Industry */}
+                    <div className="space-y-3">
+                        <label className="block text-sm font-medium text-gray-300">
+                            Which industry best describes your business?
+                        </label>
+                        <select
+                            required
+                            className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none text-white appearance-none"
+                            value={formData.industry}
+                            onChange={(e) => handleChange('industry', e.target.value)}
+                        >
+                            <option value="" disabled>Select an option...</option>
+                            <option value="Home Services">Home Services (HVAC, Plumbing, Solar, etc.)</option>
+                            <option value="Construction">Construction / General Contracting</option>
+                            <option value="Professional Services">Professional Services</option>
+                            <option value="Real Estate">Real Estate / Property Management</option>
+                            <option value="Marketing Agency">Marketing / B2B Agency</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    {/* Question 2: Main Problem */}
+                    <div className="space-y-3">
+                        <label className="block text-sm font-medium text-gray-300">
+                            What’s the main problem you’re trying to fix right now?
+                        </label>
+                        <div className="space-y-2">
+                            {[
+                                "Leads aren’t followed up fast enough",
+                                "Missed calls or inquiries slipping through",
+                                "Too much manual admin work",
+                                "No clear system to track leads",
+                                "Other"
+                            ].map((option) => (
+                                <label key={option} className={`flex items - center p - 3 rounded - xl border cursor - pointer transition - all ${formData.mainProblem === option
+                                    ? 'border-cyan-500 bg-cyan-500/10 text-white'
+                                    : 'border-zinc-800 bg-black hover:border-zinc-600 text-gray-400'
+                                    } `}>
+                                    <input
+                                        type="radio"
+                                        name="mainProblem"
+                                        value={option}
+                                        required
+                                        checked={formData.mainProblem === option}
+                                        onChange={(e) => handleChange('mainProblem', e.target.value)}
+                                        className="w-4 h-4 text-cyan-500 border-zinc-600 focus:ring-cyan-500 bg-transparent mr-3"
+                                    />
+                                    <span className="text-sm">{option}</span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Question 3: Leads per Month */}
+                    <div className="space-y-3">
+                        <label className="block text-sm font-medium text-gray-300">
+                            About how many new leads do you get per month?
+                        </label>
+                        <div className="grid grid-cols-2 gap-3">
+                            {[
+                                "Fewer than 10",
+                                "10–30",
+                                "30–75",
+                                "75+",
+                                "Not sure"
+                            ].map((option) => (
+                                <label key={option} className={`flex items - center justify - center p - 3 rounded - xl border cursor - pointer transition - all text - center ${formData.leadsPerMonth === option
+                                    ? 'border-cyan-500 bg-cyan-500/10 text-white'
+                                    : 'border-zinc-800 bg-black hover:border-zinc-600 text-gray-400'
+                                    } `}>
+                                    <input
+                                        type="radio"
+                                        name="leadsPerMonth"
+                                        value={option}
+                                        required
+                                        checked={formData.leadsPerMonth === option}
+                                        onChange={(e) => handleChange('leadsPerMonth', e.target.value)}
+                                        className="sr-only" // Hide default radio
+                                    />
+                                    <span className="text-sm font-medium">{option}</span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Question 4: Breaking Down */}
+                    <div className="space-y-3">
+                        <label className="block text-sm font-medium text-gray-300">
+                            What’s currently breaking down or costing you the most time or money?
+                        </label>
+                        <textarea
+                            required
+                            rows={3}
+                            className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none text-white resize-none"
+                            placeholder="Briefly describe the bottleneck..."
+                            value={formData.breakdown}
+                            onChange={(e) => handleChange('breakdown', e.target.value)}
+                        ></textarea>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full py-4 bg-white text-black font-bold rounded-full hover:bg-cyan-400 transition-all shadow-lg active:scale-95 text-lg mt-4"
+                    >
+                        Continue
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default WorkflowReview;

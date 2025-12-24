@@ -1,7 +1,8 @@
-
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Hero: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative min-h-[90vh] flex items-center pt-24 overflow-hidden">
       {/* Dynamic Background Elements */}
@@ -30,10 +31,10 @@ const Hero: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
-              onClick={() => document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => navigate('/workflow-review')}
               className="px-10 py-5 bg-white text-black font-bold rounded-full hover:bg-cyan-400 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] active:scale-95 text-lg"
             >
-              Get a Custom Automation Plan
+              Request a Workflow Review
             </button>
           </div>
         </div>

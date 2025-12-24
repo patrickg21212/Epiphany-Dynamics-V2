@@ -1,5 +1,5 @@
-
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Hero from '../components/Hero';
 import LogoCarousel from '../components/LogoCarousel';
 import Solutions from '../components/Solutions';
@@ -8,6 +8,7 @@ import Stats from '../components/Stats';
 import CaseStudies from '../components/CaseStudies';
 
 const Home: React.FC = () => {
+    const navigate = useNavigate();
     // Handle hash scrolling on mount (if navigating from another page)
     useEffect(() => {
         if (window.location.hash) {
@@ -55,8 +56,11 @@ const Home: React.FC = () => {
 
             {/* Sticky Call to Action for Mobile */}
             <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-black/80 backdrop-blur-lg border-t border-zinc-800 z-50">
-                <button className="w-full bg-white text-black font-bold py-4 rounded-full shadow-lg active:scale-95 transition-transform" onClick={() => document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' })}>
-                    GET STARTED
+                <button
+                    className="w-full bg-white text-black font-bold py-4 rounded-full shadow-lg active:scale-95 transition-transform"
+                    onClick={() => navigate('/workflow-review')}
+                >
+                    Request a Workflow Review
                 </button>
             </div>
         </main>
