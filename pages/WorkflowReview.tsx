@@ -4,9 +4,10 @@ const WorkflowReview: React.FC = () => {
     const [submitted, setSubmitted] = useState(false);
     const [formData, setFormData] = useState({
         industry: '',
-        mainProblem: '',
-        leadsPerMonth: '',
-        breakdown: ''
+        main_problem: '', // Renamed to match requirement
+        monthly_leads: '', // Renamed to match requirement
+        breakdown_cost: '', // Renamed to match requirement
+        email: ''
     });
 
     useEffect(() => {
@@ -24,10 +25,50 @@ const WorkflowReview: React.FC = () => {
         }
     }, [submitted]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Logic to handle submission could go here (e.g. API call), 
-        // but requirement is just to show confirmation state.
+
+        // Hard Fix: Read values directly from the form element to ensure no state de-sync
+        const form = e.currentTarget;
+        const formElements = new FormData(form);
+
+        // Explicitly extract values
+        const email = formElements.get('email') as string || '';
+        const industry = formElements.get('industry') as string || '';
+        const main_problem = formElements.get('main_problem') as string || '';
+        const monthly_leads = formElements.get('monthly_leads') as string || '';
+        const breakdown_cost = formElements.get('breakdown_cost') as string || '';
+
+        // Prepare payload for Make.com webhook
+        const payload = {
+            source: "epiphanydynamics-antigravity-staging",
+            submitted_at: new Date().toISOString(),
+            page_url: window.location.href,
+            email: email, // Explicitly mapped
+            industry: industry,
+            main_problem: main_problem,
+            monthly_leads: monthly_leads,
+            breakdown_cost: breakdown_cost
+        };
+
+        // Debug logging to verify payload matches requirements
+        console.log('Submitting webhook payload:', payload);
+
+        try {
+            // Fire and forget
+            await fetch('https://hook.us2.make.com/5ecc2psdudocogqbawhdjt3qjpbw7wnd', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+        } catch (error) {
+            // Silent error handling - do not block the user flow
+            console.error('Webhook submission failed', error);
+        }
+
+        // Show confirmation state regardless of webhook result
         setSubmitted(true);
         // Scroll to top to ensure message is seen
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -97,6 +138,7 @@ const WorkflowReview: React.FC = () => {
                         </label>
                         <select
                             required
+                            name="industry"
                             className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none text-white appearance-none"
                             value={formData.industry}
                             onChange={(e) => handleChange('industry', e.target.value)}
@@ -124,17 +166,17 @@ const WorkflowReview: React.FC = () => {
                                 "No clear system to track leads",
                                 "Other"
                             ].map((option) => (
-                                <label key={option} className={`flex items - center p - 3 rounded - xl border cursor - pointer transition - all ${formData.mainProblem === option
+                                <label key={option} className={`flex items - center p - 3 rounded - xl border cursor - pointer transition - all ${formData.main_problem === option
                                     ? 'border-cyan-500 bg-cyan-500/10 text-white'
                                     : 'border-zinc-800 bg-black hover:border-zinc-600 text-gray-400'
                                     } `}>
                                     <input
                                         type="radio"
-                                        name="mainProblem"
+                                        name="main_problem"
                                         value={option}
                                         required
-                                        checked={formData.mainProblem === option}
-                                        onChange={(e) => handleChange('mainProblem', e.target.value)}
+                                        checked={formData.main_problem === option}
+                                        onChange={(e) => handleChange('main_problem', e.target.value)}
                                         className="w-4 h-4 text-cyan-500 border-zinc-600 focus:ring-cyan-500 bg-transparent mr-3"
                                     />
                                     <span className="text-sm">{option}</span>
@@ -156,17 +198,17 @@ const WorkflowReview: React.FC = () => {
                                 "75+",
                                 "Not sure"
                             ].map((option) => (
-                                <label key={option} className={`flex items - center justify - center p - 3 rounded - xl border cursor - pointer transition - all text - center ${formData.leadsPerMonth === option
+                                <label key={option} className={`flex items - center justify - center p - 3 rounded - xl border cursor - pointer transition - all text - center ${formData.monthly_leads === option
                                     ? 'border-cyan-500 bg-cyan-500/10 text-white'
                                     : 'border-zinc-800 bg-black hover:border-zinc-600 text-gray-400'
                                     } `}>
                                     <input
                                         type="radio"
-                                        name="leadsPerMonth"
+                                        name="monthly_leads"
                                         value={option}
                                         required
-                                        checked={formData.leadsPerMonth === option}
-                                        onChange={(e) => handleChange('leadsPerMonth', e.target.value)}
+                                        checked={formData.monthly_leads === option}
+                                        onChange={(e) => handleChange('monthly_leads', e.target.value)}
                                         className="sr-only" // Hide default radio
                                     />
                                     <span className="text-sm font-medium">{option}</span>
@@ -182,12 +224,29 @@ const WorkflowReview: React.FC = () => {
                         </label>
                         <textarea
                             required
+                            name="breakdown_cost"
                             rows={3}
                             className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none text-white resize-none"
                             placeholder="Briefly describe the bottleneck..."
-                            value={formData.breakdown}
-                            onChange={(e) => handleChange('breakdown', e.target.value)}
+                            value={formData.breakdown_cost}
+                            onChange={(e) => handleChange('breakdown_cost', e.target.value)}
                         ></textarea>
+                    </div>
+
+                    {/* New Question: Email */}
+                    <div className="space-y-3">
+                        <label className="block text-sm font-medium text-gray-300">
+                            Email (so we can send your booking details)
+                        </label>
+                        <input
+                            type="email"
+                            required
+                            name="email"
+                            className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none text-white"
+                            placeholder="name@company.com"
+                            value={formData.email}
+                            onChange={(e) => handleChange('email', e.target.value)}
+                        />
                     </div>
 
                     <button
