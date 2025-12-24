@@ -10,6 +10,35 @@ const WorkflowReview: React.FC = () => {
         email: ''
     });
 
+    const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+    const faqs = [
+        {
+            q: "Is this a sales call?",
+            a: "No. This is a working conversation to understand how your current workflows operate. If it makes sense to continue, we’ll talk about next steps. If not, that’s fine too."
+        },
+        {
+            q: "Do I need to prepare anything in advance?",
+            a: "No prep required. Context helps, but we can work through everything live on the call."
+        },
+        {
+            q: "What happens during the Workflow Review?",
+            a: "We’ll walk through how leads, follow-ups, and internal workflows currently run, and where friction typically shows up. The goal is clarity, not a pitch."
+        },
+        {
+            q: "What happens after the call?",
+            a: "If there’s a fit to go deeper, we’ll outline what that would look like. If not, you’ll still leave with a clear understanding of whether automation makes sense for you."
+        },
+        {
+            q: "Who is this for?",
+            a: "Operators who already know their systems or workflows are slowing things down and want to evaluate automation realistically. It’s not for anyone looking for quick hacks or generic advice."
+        }
+    ];
+
+    const toggleFaq = (index: number) => {
+        setOpenFaqIndex(openFaqIndex === index ? null : index);
+    };
+
     useEffect(() => {
         if (submitted) {
             const script = document.createElement("script");
@@ -100,9 +129,36 @@ const WorkflowReview: React.FC = () => {
                     {/* Calendly Inline Widget */}
                     <div
                         className="calendly-inline-widget w-full h-[700px] border border-zinc-800 rounded-2xl overflow-hidden bg-zinc-900"
-                        data-url="https://calendly.com/epiphanydynamics/ai-workflow-audit-call?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=06b6d4"
+                        data-url="https://calendly.com/epiphanydynamics/ai-workflow-review-call?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=06b6d4"
                         style={{ minWidth: '320px', height: '700px' }}
                     ></div>
+
+                    {/* FAQ Section */}
+                    <div className="mt-12 max-w-2xl mx-auto text-left">
+                        <h3 className="text-xl font-bold text-white mb-6 pl-2">Before you book</h3>
+                        <div className="space-y-2">
+                            {faqs.map((faq, index) => (
+                                <div key={index} className="border-b border-zinc-800 last:border-0">
+                                    <button
+                                        onClick={() => toggleFaq(index)}
+                                        className="w-full py-4 px-2 flex items-center justify-between text-left focus:outline-none group"
+                                    >
+                                        <span className="text-gray-300 font-medium group-hover:text-white transition-colors">{faq.q}</span>
+                                        <span className="ml-4 text-gray-500 font-mono text-lg">
+                                            {openFaqIndex === index ? '−' : '+'}
+                                        </span>
+                                    </button>
+                                    <div
+                                        className={`overflow-hidden transition-all duration-300 ease-in-out ${openFaqIndex === index ? 'max-h-40 opacity-100 pb-4' : 'max-h-0 opacity-0'}`}
+                                    >
+                                        <p className="px-2 text-sm text-gray-400 leading-relaxed">
+                                            {faq.a}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
                     {/* Optional Intake Step */}
                     <div className="mt-8 p-6 border border-zinc-800 rounded-2xl bg-zinc-900/30">

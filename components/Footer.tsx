@@ -32,7 +32,10 @@ const Footer: React.FC = () => {
             <ul className="space-y-4 text-sm font-poppins text-gray-500">
               <li className="flex items-center space-x-3">
                 <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                <a href="mailto:patrick@epiphanydynamics.ai" className="hover:text-white transition-colors">patrick@epiphanydynamics.ai</a>
+                <div className="flex flex-col">
+                  <span>Patrick Gibbs, Founder</span>
+                  <a href="mailto:patrick@epiphanydynamics.ai" className="hover:text-white transition-colors">patrick@epiphanydynamics.ai</a>
+                </div>
               </li>
             </ul>
           </div>
