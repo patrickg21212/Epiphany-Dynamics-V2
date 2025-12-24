@@ -29,11 +29,11 @@ const Hero: React.FC = () => {
             We build custom AI automations, agent workflows, and LLM-powered systems that integrate directly into real business operations.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="px-10 py-5 bg-white text-black font-bold rounded-full hover:bg-cyan-400 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] active:scale-95 text-lg">
+            <button
+              onClick={() => document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' })}
+              className="px-10 py-5 bg-white text-black font-bold rounded-full hover:bg-cyan-400 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] active:scale-95 text-lg"
+            >
               Get a Custom Automation Plan
-            </button>
-            <button className="px-10 py-5 border border-zinc-700 text-white font-bold rounded-full hover:bg-zinc-900 transition-all active:scale-95 text-lg flex items-center justify-center space-x-2">
-              <span>EXPLORE PLATFORM</span>
             </button>
           </div>
         </div>
@@ -43,15 +43,8 @@ const Hero: React.FC = () => {
           <div className="relative w-full max-w-md aspect-square">
             {/* The Stylized '1' / Bolt Logo from description */}
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-3xl opacity-50 animate-pulse"></div>
-            <div className="relative z-10 w-full h-full border border-zinc-800 rounded-2xl bg-zinc-900/30 backdrop-blur-sm p-12 flex items-center justify-center group overflow-hidden">
-              <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.4)]">
-                <defs>
-                  <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#fff" />
-                    <stop offset="100%" stopColor="#888" />
-                  </linearGradient>
-                </defs>
-                <path d="M70 20 L130 20 L160 180 L130 180 L115 120 L70 180 L40 180 L100 20 Z" fill="url(#logoGrad)" />
+            <div className="relative z-10 w-full h-full p-12 flex items-center justify-center group overflow-hidden">
+              <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.4)] pointer-events-none">
                 {/* Circuit lines */}
                 <g stroke="#fff" strokeWidth="0.5" fill="none" opacity="0.6">
                   <path d="M50 40 H30 M45 60 H20 M55 80 H25 M40 100 H15" className="animate-pulse" />
@@ -62,6 +55,11 @@ const Hero: React.FC = () => {
                 <circle cx="15" cy="100" r="2" fill="white" className="animate-ping delay-300" />
                 <circle cx="185" cy="100" r="2" fill="cyan" className="animate-ping delay-700" />
               </svg>
+              <img
+                src="/logos/geometric_mark_final_transparent.png"
+                alt="Epiphany Dynamics Geometric Mark"
+                className="relative z-10 w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.4)]"
+              />
             </div>
 
             {/* Animated float items */}
