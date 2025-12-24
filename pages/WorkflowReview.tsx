@@ -32,12 +32,17 @@ const WorkflowReview: React.FC = () => {
         const form = e.currentTarget;
         const formElements = new FormData(form);
 
-        // Explicitly extract values
-        const email = formElements.get('email') as string || '';
-        const industry = formElements.get('industry') as string || '';
-        const main_problem = formElements.get('main_problem') as string || '';
-        const monthly_leads = formElements.get('monthly_leads') as string || '';
-        const breakdown_cost = formElements.get('breakdown_cost') as string || '';
+        // Explicitly extract values with fallbacks to state
+        const rawEmail = formElements.get('email') as string;
+        const stateEmail = formData.email;
+
+        // Use the first non-empty value found
+        const email = (rawEmail && rawEmail.trim() !== '') ? rawEmail.trim() : stateEmail.trim();
+
+        const industry = (formElements.get('industry') as string) || formData.industry;
+        const main_problem = (formElements.get('main_problem') as string) || formData.main_problem;
+        const monthly_leads = (formElements.get('monthly_leads') as string) || formData.monthly_leads;
+        const breakdown_cost = (formElements.get('breakdown_cost') as string) || formData.breakdown_cost;
 
         // Prepare payload for Make.com webhook
         const payload = {
