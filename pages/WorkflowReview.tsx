@@ -91,7 +91,12 @@ const WorkflowReview: React.FC = () => {
 
     try {
       // Fire and forget
-      await fetch('https://hook.us2.make.com/5ecc2psdudocogqbawhdjt3qjpbw7wnd', {
+      const webhookUrl = import.meta.env.VITE_MAKE_WEBHOOK_URL;
+      if (!webhookUrl) {
+        console.error('Webhook URL not configured');
+        return;
+      }
+      await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
