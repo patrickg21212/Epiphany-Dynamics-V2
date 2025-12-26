@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Turnstile, { useTurnstile } from 'react-turnstile';
+import React, { useState, useEffect } from 'react';
 import SelectField from '../components/ui/SelectField';
 import RadioGroup from '../components/ui/RadioGroup';
 import TextAreaField from '../components/ui/TextAreaField';
@@ -39,8 +38,6 @@ const WorkflowReview: React.FC = () => {
   }, [formData]);
 
   const [honeypot, setHoneypot] = useState('');
-  const [turnstileToken, setTurnstileToken] = useState('');
-  const turnstileRef = useRef(null);
 
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
@@ -108,11 +105,6 @@ const WorkflowReview: React.FC = () => {
       return;
     }
 
-    if (!turnstileToken) {
-      setSubmissionError('Please complete the security check.');
-      return;
-    }
-
     const industry = (formElements.get('industry') as string) || formData.industry;
     const main_problem = (formElements.get('main_problem') as string) || formData.main_problem;
     const monthly_leads = (formElements.get('monthly_leads') as string) || formData.monthly_leads;
@@ -171,11 +163,6 @@ const WorkflowReview: React.FC = () => {
     } catch (error) {
       console.error('Webhook submission failed', error);
       setSubmissionError('Something went wrong. Please check your connection and try again.');
-      if (turnstileRef.current) {
-        // @ts-ignore
-        turnstileRef.current.reset();
-      }
-      setTurnstileToken('');
     } finally {
       setIsSubmitting(false);
     }
@@ -389,17 +376,6 @@ const WorkflowReview: React.FC = () => {
               onChange={(e) => setHoneypot(e.target.value)}
               tabIndex={-1}
               autoComplete="off"
-            />
-          </div>
-
-          <div className="mt-6 flex justify-center md:justify-start">
-            <Turnstile
-              ref={turnstileRef}
-              sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
-              onVerify={(token) => setTurnstileToken(token)}
-              onError={() => setSubmissionError('Security check failed. Please try again.')}
-              onExpire={() => setTurnstileToken('')}
-              theme="dark"
             />
           </div>
 
