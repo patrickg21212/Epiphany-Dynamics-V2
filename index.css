@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --font-spartan: 'League Spartan', sans-serif;
+  --font-poppins: 'Poppins', sans-serif;
+  --animate-scroll: scroll 30s linear infinite;
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+body {
+  font-family: var(--font-spartan);
+  background-color: #000000;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+.font-poppins {
+  font-family: var(--font-poppins);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+.animate-infinite-scroll {
+  display: flex;
+  width: max-content;
+  animation: var(--animate-scroll);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+}
+
+.text-glow-white {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
