@@ -16,6 +16,8 @@ const WorkflowReview: React.FC = () => {
     email: '',
   });
 
+  const [honeypot, setHoneypot] = useState('');
+
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
   const faqs = [
@@ -74,6 +76,14 @@ const WorkflowReview: React.FC = () => {
     // Use the first non-empty value found
     const email = rawEmail && rawEmail.trim() !== '' ? rawEmail.trim() : stateEmail.trim();
 
+    // Anti-Spam Check: If honeypot field is filled, pretend success but do nothing
+    if (honeypot) {
+      console.log('Bot detected, submission ignored.');
+      setSubmitted(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     const industry = (formElements.get('industry') as string) || formData.industry;
     const main_problem = (formElements.get('main_problem') as string) || formData.main_problem;
     const monthly_leads = (formElements.get('monthly_leads') as string) || formData.monthly_leads;
@@ -116,6 +126,15 @@ const WorkflowReview: React.FC = () => {
         throw new Error(`Submission failed with status: ${response.status}`);
       }
 
+      // GA4 Tracking: Lead Generated
+      if ((window as any).gtag) {
+        (window as any).gtag('event', 'lead_generated', {
+          event_category: 'Workflow Review',
+          event_label: 'Submission Success',
+          value: 1,
+        });
+      }
+
       // Show confirmation state only on success
       setSubmitted(true);
       // Scroll to top to ensure message is seen
@@ -137,6 +156,24 @@ const WorkflowReview: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // For Select and Radio inputs, we track on change immediately
+    // For text inputs, we'll use onBlur instead to avoid spamming events
+    if (
+      e.target.tagName === 'SELECT' ||
+      (e.target.tagName === 'INPUT' && (e.target as HTMLInputElement).type === 'radio')
+    ) {
+      trackStepCompletion(name, value);
+    }
+  };
+
+  const trackStepCompletion = (stepName: string, stepValue: string) => {
+    if ((window as any).gtag && stepValue) {
+      (window as any).gtag('event', 'step_complete', {
+        step_name: stepName,
+        step_value: stepValue,
+      });
+    }
   };
 
   if (submitted) {
@@ -288,6 +325,7 @@ const WorkflowReview: React.FC = () => {
             placeholder="Briefly describe the bottleneck..."
             value={formData.breakdown_cost}
             onChange={handleInputChange}
+            onBlur={(e) => trackStepCompletion(e.target.name, e.target.value)}
           />
 
           {/* New Question: Email */}
@@ -299,6 +337,7 @@ const WorkflowReview: React.FC = () => {
             placeholder="name@company.com"
             value={formData.email}
             onChange={handleInputChange}
+            onBlur={(e) => trackStepCompletion(e.target.name, e.target.value)}
           />
 
           {submissionError && (
@@ -306,6 +345,18 @@ const WorkflowReview: React.FC = () => {
               {submissionError}
             </div>
           )}
+
+          {/* Honeypot Field - Hidden */}
+          <div className="hidden">
+            <input
+              type="text"
+              name="website_url"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
 
           <button
             type="submit"

@@ -5,6 +5,7 @@ interface TextAreaFieldProps {
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
   required?: boolean;
   rows?: number;
@@ -15,6 +16,7 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
   name,
   value,
   onChange,
+  onBlur,
   placeholder,
   required = false,
   rows = 3,
@@ -30,6 +32,7 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
       ></textarea>
     </div>
   );
