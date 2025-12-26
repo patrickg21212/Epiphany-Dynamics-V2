@@ -1,7 +1,10 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 
-const StatCounter: React.FC<{ end: number, suffix?: string, title: string }> = ({ end, suffix = "", title }) => {
+const StatCounter: React.FC<{ end: number; suffix?: string; title: string }> = ({
+  end,
+  suffix = '',
+  title,
+}) => {
   const [count, setCount] = useState(0);
   const elementRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -41,9 +44,13 @@ const StatCounter: React.FC<{ end: number, suffix?: string, title: string }> = (
   }, [isVisible, end]);
 
   return (
-    <div ref={elementRef} className="flex flex-col items-center text-center p-8 border border-zinc-800 rounded-2xl bg-black hover:border-zinc-500 transition-colors">
+    <div
+      ref={elementRef}
+      className="flex flex-col items-center text-center p-8 border border-zinc-800 rounded-2xl bg-black hover:border-zinc-500 transition-colors"
+    >
       <div className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tighter">
-        {count}{suffix}
+        {count}
+        {suffix}
       </div>
       <div className="text-gray-500 uppercase tracking-widest text-xs font-bold">{title}</div>
     </div>
