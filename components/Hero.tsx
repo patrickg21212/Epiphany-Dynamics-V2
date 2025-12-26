@@ -10,7 +10,13 @@ const Hero: React.FC = () => {
         <div className="absolute top-1/4 -left-20 w-96 h-96 bg-cyan-900/20 rounded-full blur-[120px] animate-pulse"></div>
         <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-900/20 rounded-full blur-[120px] animate-pulse delay-700"></div>
         {/* Grid pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        ></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
@@ -24,10 +30,15 @@ const Hero: React.FC = () => {
             <span>Intelligence Redefined</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tighter mb-8 text-glow-white">
-            Design, Deploy, and Scale <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-zinc-500">AI Automations</span> That Actually Run in Production.
+            Design, Deploy, and Scale{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-zinc-500">
+              AI Automations
+            </span>{' '}
+            That Actually Run in Production.
           </h1>
           <p className="text-xl text-gray-400 font-poppins leading-relaxed mb-10 max-w-2xl">
-            We build custom AI automations, agent workflows, and LLM-powered systems that integrate directly into real business operations.
+            We build custom AI automations, agent workflows, and LLM-powered systems that integrate
+            directly into real business operations.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
@@ -45,11 +56,20 @@ const Hero: React.FC = () => {
             {/* The Stylized '1' / Bolt Logo from description */}
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-3xl opacity-50 animate-pulse"></div>
             <div className="relative z-10 w-full h-full p-12 flex items-center justify-center group overflow-hidden">
-              <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.4)] pointer-events-none">
+              <svg
+                viewBox="0 0 200 200"
+                className="absolute inset-0 w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.4)] pointer-events-none"
+              >
                 {/* Circuit lines */}
                 <g stroke="#fff" strokeWidth="0.5" fill="none" opacity="0.6">
-                  <path d="M50 40 H30 M45 60 H20 M55 80 H25 M40 100 H15" className="animate-pulse" />
-                  <path d="M150 40 H170 M155 60 H180 M145 80 H175 M160 100 H185" className="animate-pulse delay-500" />
+                  <path
+                    d="M50 40 H30 M45 60 H20 M55 80 H25 M40 100 H15"
+                    className="animate-pulse"
+                  />
+                  <path
+                    d="M150 40 H170 M155 60 H180 M145 80 H175 M160 100 H185"
+                    className="animate-pulse delay-500"
+                  />
                 </g>
                 {/* Glowing nodes */}
                 <circle cx="25" cy="40" r="2" fill="cyan" className="animate-ping" />
@@ -64,7 +84,6 @@ const Hero: React.FC = () => {
             </div>
 
             {/* Animated float items */}
-
           </div>
         </div>
       </div>
