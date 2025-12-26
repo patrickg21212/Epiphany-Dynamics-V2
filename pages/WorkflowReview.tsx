@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import SelectField from '../components/ui/SelectField';
+import RadioGroup from '../components/ui/RadioGroup';
+import TextAreaField from '../components/ui/TextAreaField';
+import InputField from '../components/ui/InputField';
 
 const WorkflowReview: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     industry: '',
     main_problem: '', // Renamed to match requirement
@@ -89,33 +95,48 @@ const WorkflowReview: React.FC = () => {
     // Debug logging to verify payload matches requirements
     console.log('Submitting webhook payload:', payload);
 
+    setIsSubmitting(true);
+    setSubmissionError(null);
+
     try {
-      // Fire and forget
       const webhookUrl = import.meta.env.VITE_MAKE_WEBHOOK_URL;
       if (!webhookUrl) {
-        console.error('Webhook URL not configured');
-        return;
+        throw new Error('Webhook URL not configured');
       }
-      await fetch(webhookUrl, {
+
+      const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
       });
-    } catch (error) {
-      // Silent error handling - do not block the user flow
-      console.error('Webhook submission failed', error);
-    }
 
-    // Show confirmation state regardless of webhook result
-    setSubmitted(true);
-    // Scroll to top to ensure message is seen
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (!response.ok) {
+        throw new Error(`Submission failed with status: ${response.status}`);
+      }
+
+      // Show confirmation state only on success
+      setSubmitted(true);
+      // Scroll to top to ensure message is seen
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      console.error('Webhook submission failed', error);
+      setSubmissionError('Something went wrong. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   if (submitted) {
@@ -216,132 +237,84 @@ const WorkflowReview: React.FC = () => {
           className="space-y-8 p-8 border border-zinc-800 rounded-3xl bg-zinc-900/20"
         >
           {/* Question 1: Industry */}
-          <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-300">
-              Which industry best describes your business?
-            </label>
-            <select
-              required
-              name="industry"
-              className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none text-white appearance-none"
-              value={formData.industry}
-              onChange={(e) => handleChange('industry', e.target.value)}
-            >
-              <option value="" disabled>
-                Select an option...
-              </option>
-              <option value="Home Services">Home Services (HVAC, Plumbing, Solar, etc.)</option>
-              <option value="Construction">Construction / General Contracting</option>
-              <option value="Professional Services">Professional Services</option>
-              <option value="Real Estate">Real Estate / Property Management</option>
-              <option value="Marketing Agency">Marketing / B2B Agency</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
+          <SelectField
+            label="Which industry best describes your business?"
+            name="industry"
+            required
+            value={formData.industry}
+            onChange={handleInputChange}
+            options={[
+              'Home Services (HVAC, Plumbing, Solar, etc.)',
+              'Construction / General Contracting',
+              'Professional Services',
+              'Real Estate / Property Management',
+              'Marketing Agency',
+              'Other',
+            ]}
+          />
 
           {/* Question 2: Main Problem */}
-          <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-300">
-              What’s the main problem you’re trying to fix right now?
-            </label>
-            <div className="space-y-2">
-              {[
-                'Leads aren’t followed up fast enough',
-                'Missed calls or inquiries slipping through',
-                'Too much manual admin work',
-                'No clear system to track leads',
-                'Other',
-              ].map((option) => (
-                <label
-                  key={option}
-                  className={`flex items - center p - 3 rounded - xl border cursor - pointer transition - all ${
-                    formData.main_problem === option
-                      ? 'border-cyan-500 bg-cyan-500/10 text-white'
-                      : 'border-zinc-800 bg-black hover:border-zinc-600 text-gray-400'
-                  } `}
-                >
-                  <input
-                    type="radio"
-                    name="main_problem"
-                    value={option}
-                    required
-                    checked={formData.main_problem === option}
-                    onChange={(e) => handleChange('main_problem', e.target.value)}
-                    className="w-4 h-4 text-cyan-500 border-zinc-600 focus:ring-cyan-500 bg-transparent mr-3"
-                  />
-                  <span className="text-sm">{option}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+          <RadioGroup
+            label="What’s the main problem you’re trying to fix right now?"
+            name="main_problem"
+            required
+            value={formData.main_problem}
+            onChange={handleInputChange}
+            options={[
+              'Leads aren’t followed up fast enough',
+              'Missed calls or inquiries slipping through',
+              'Too much manual admin work',
+              'No clear system to track leads',
+              'Other',
+            ]}
+          />
 
           {/* Question 3: Leads per Month */}
-          <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-300">
-              About how many new leads do you get per month?
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              {['Fewer than 10', '10–30', '30–75', '75+', 'Not sure'].map((option) => (
-                <label
-                  key={option}
-                  className={`flex items - center justify - center p - 3 rounded - xl border cursor - pointer transition - all text - center ${
-                    formData.monthly_leads === option
-                      ? 'border-cyan-500 bg-cyan-500/10 text-white'
-                      : 'border-zinc-800 bg-black hover:border-zinc-600 text-gray-400'
-                  } `}
-                >
-                  <input
-                    type="radio"
-                    name="monthly_leads"
-                    value={option}
-                    required
-                    checked={formData.monthly_leads === option}
-                    onChange={(e) => handleChange('monthly_leads', e.target.value)}
-                    className="sr-only" // Hide default radio
-                  />
-                  <span className="text-sm font-medium">{option}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+          <RadioGroup
+            label="About how many new leads do you get per month?"
+            name="monthly_leads"
+            required
+            value={formData.monthly_leads}
+            onChange={handleInputChange}
+            layout="grid"
+            options={['Fewer than 10', '10–30', '30–75', '75+', 'Not sure']}
+          />
 
           {/* Question 4: Breaking Down */}
-          <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-300">
-              What’s currently breaking down or costing you the most time or money?
-            </label>
-            <textarea
-              required
-              name="breakdown_cost"
-              rows={3}
-              className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none text-white resize-none"
-              placeholder="Briefly describe the bottleneck..."
-              value={formData.breakdown_cost}
-              onChange={(e) => handleChange('breakdown_cost', e.target.value)}
-            ></textarea>
-          </div>
+          <TextAreaField
+            label="What’s currently breaking down or costing you the most time or money?"
+            name="breakdown_cost"
+            required
+            placeholder="Briefly describe the bottleneck..."
+            value={formData.breakdown_cost}
+            onChange={handleInputChange}
+          />
 
           {/* New Question: Email */}
-          <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-300">
-              Email (so we can send your booking details)
-            </label>
-            <input
-              type="email"
-              required
-              name="email"
-              className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none text-white"
-              placeholder="name@company.com"
-              value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-            />
-          </div>
+          <InputField
+            label="Email (so we can send your booking details)"
+            name="email"
+            type="email"
+            required
+            placeholder="name@company.com"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+
+          {submissionError && (
+            <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-200 text-center">
+              {submissionError}
+            </div>
+          )}
 
           <button
             type="submit"
-            className="w-full py-4 bg-white text-black font-bold rounded-full hover:bg-cyan-400 transition-all shadow-lg active:scale-95 text-lg mt-4"
+            disabled={isSubmitting}
+            className={`w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 ${
+              isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-cyan-400 active:scale-95'
+            }`}
           >
-            Continue
+            {isSubmitting ? 'Submitting...' : 'Continue'}
           </button>
         </form>
       </div>
