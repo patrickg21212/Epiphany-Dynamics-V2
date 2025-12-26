@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --font-spartan: 'League Spartan', sans-serif;
@@ -13,6 +13,65 @@
       transform: translateX(-50%);
     }
   }
+}
+
+/* Local Font Definitions */
+@font-face {
+  font-family: 'League Spartan';
+  font-style: normal;
+  font-weight: 300;
+  font-display: optional;
+  src: url('./src/assets/fonts/LeagueSpartan-300.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'League Spartan';
+  font-style: normal;
+  font-weight: 400;
+  font-display: optional;
+  src: url('./src/assets/fonts/LeagueSpartan-400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'League Spartan';
+  font-style: normal;
+  font-weight: 500;
+  font-display: optional;
+  src: url('./src/assets/fonts/LeagueSpartan-500.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'League Spartan';
+  font-style: normal;
+  font-weight: 700;
+  font-display: optional;
+  src: url('./src/assets/fonts/LeagueSpartan-700.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 300;
+  font-display: optional;
+  src: url('./src/assets/fonts/Poppins-300.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: optional;
+  src: url('./src/assets/fonts/Poppins-400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-display: optional;
+  src: url('./src/assets/fonts/Poppins-500.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: optional;
+  src: url('./src/assets/fonts/Poppins-600.ttf') format('truetype');
 }
 
 body {
