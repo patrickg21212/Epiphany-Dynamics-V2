@@ -1,23 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Privacy from './pages/Privacy';
-import Terms from './pages/Terms';
-import WorkflowReview from './pages/WorkflowReview';
+
+// Lazy load pages for code splitting
+const Home = lazy(() => import('./pages/Home'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const Terms = lazy(() => import('./pages/Terms'));
+const WorkflowReview = lazy(() => import('./pages/WorkflowReview'));
+
+// Simple loading component
+const Loading = () => (
+  <div className="flex items-center justify-center min-h-screen bg-black">
+    <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
 
 const App: React.FC = () => {
   return (
     <Router>
       <div className="flex flex-col min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-black">
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/workflow-review" element={<WorkflowReview />} />
-        </Routes>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/workflow-review" element={<WorkflowReview />} />
+          </Routes>
+        </Suspense>
         <Footer />
       </div>
     </Router>
