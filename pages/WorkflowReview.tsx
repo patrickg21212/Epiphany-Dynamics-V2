@@ -5,16 +5,37 @@ import TextAreaField from '../components/ui/TextAreaField';
 import InputField from '../components/ui/InputField';
 
 const WorkflowReview: React.FC = () => {
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(() => {
+    const saved = localStorage.getItem('workflowReviewSubmitted');
+    return saved === 'true';
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    industry: '',
-    main_problem: '', // Renamed to match requirement
-    monthly_leads: '', // Renamed to match requirement
-    breakdown_cost: '', // Renamed to match requirement
-    email: '',
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem('workflowReviewData');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error('Error parsing saved form data', e);
+      }
+    }
+    return {
+      industry: '',
+      main_problem: '', // Renamed to match requirement
+      monthly_leads: '', // Renamed to match requirement
+      breakdown_cost: '', // Renamed to match requirement
+      email: '',
+    };
   });
+
+  useEffect(() => {
+    localStorage.setItem('workflowReviewSubmitted', String(submitted));
+  }, [submitted]);
+
+  useEffect(() => {
+    localStorage.setItem('workflowReviewData', JSON.stringify(formData));
+  }, [formData]);
 
   const [honeypot, setHoneypot] = useState('');
 
