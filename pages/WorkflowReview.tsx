@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Turnstile from 'react-turnstile';
 import SelectField from '../components/ui/SelectField';
 import RadioGroup from '../components/ui/RadioGroup';
 import TextAreaField from '../components/ui/TextAreaField';
@@ -8,6 +9,7 @@ const WorkflowReview: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     industry: '',
     main_problem: '', // Renamed to match requirement
@@ -84,6 +86,12 @@ const WorkflowReview: React.FC = () => {
       return;
     }
 
+    // Turnstile Check
+    if (!turnstileToken) {
+      setSubmissionError('Please verify you are human.');
+      return;
+    }
+
     const industry = (formElements.get('industry') as string) || formData.industry;
     const main_problem = (formElements.get('main_problem') as string) || formData.main_problem;
     const monthly_leads = (formElements.get('monthly_leads') as string) || formData.monthly_leads;
@@ -100,6 +108,7 @@ const WorkflowReview: React.FC = () => {
       main_problem: main_problem,
       monthly_leads: monthly_leads,
       breakdown_cost: breakdown_cost,
+      turnstile_token: turnstileToken,
     };
 
     // Debug logging to verify payload matches requirements
@@ -355,6 +364,13 @@ const WorkflowReview: React.FC = () => {
               onChange={(e) => setHoneypot(e.target.value)}
               tabIndex={-1}
               autoComplete="off"
+            />
+          </div>
+
+          <div className="mt-4">
+            <Turnstile
+              sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
+              onVerify={(token) => setTurnstileToken(token)}
             />
           </div>
 

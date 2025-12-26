@@ -1,0 +1,23 @@
+[
+  {
+    "path": "/*",
+    "timings": [
+      {
+        "metric": "interactive",
+        "budget": 3000
+      },
+      {
+        "metric": "first-contentful-paint",
+        "budget": 2000
+      }
+    ],
+    "resourceSizes": [],
+    "resourceCounts": [],
+    "lighthouse": {
+      "performance": 0.9,
+      "accessibility": 0.9,
+      "best-practices": 0.9,
+      "seo": 0.9
+    }
+  }
+]
