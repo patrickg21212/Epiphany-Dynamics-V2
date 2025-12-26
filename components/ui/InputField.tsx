@@ -6,6 +6,7 @@ interface InputFieldProps {
   type?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   placeholder?: string;
   required?: boolean;
 }
@@ -16,6 +17,7 @@ const InputField: React.FC<InputFieldProps> = ({
   type = 'text',
   value,
   onChange,
+  onBlur,
   placeholder,
   required = false,
 }) => {
@@ -30,6 +32,7 @@ const InputField: React.FC<InputFieldProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
       />
     </div>
   );

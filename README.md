@@ -6,12 +6,12 @@ Epiphany Dynamics is an industry-leading AI solutions provider. This repository 
 
 The project is organized as follows:
 
--   `components/`: Reusable UI components (e.g., Navbar, Footer, Hero).
--   `pages/`: Application pages corresponding to different routes (e.g., Home, Privacy, Terms).
--   `App.tsx`: The main application component that sets up routing.
--   `index.tsx`: The entry point for the React application.
--   `vite.config.ts`: Configuration for Vite.
--   `tailwind.config.js`: (Implicit via CDN or setup) Tailwind CSS configuration.
+- `components/`: Reusable UI components (e.g., Navbar, Footer, Hero).
+- `pages/`: Application pages corresponding to different routes (e.g., Home, Privacy, Terms).
+- `App.tsx`: The main application component that sets up routing.
+- `index.tsx`: The entry point for the React application.
+- `vite.config.ts`: Configuration for Vite.
+- `tailwind.config.js`: (Implicit via CDN or setup) Tailwind CSS configuration.
 
 ## How to Run Locally
 
