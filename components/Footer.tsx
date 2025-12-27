@@ -7,7 +7,11 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-16 mb-20">
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center space-x-2 mb-8 group">
+            <Link
+              to="/"
+              onClick={() => window.scrollTo(0, 0)}
+              className="flex items-center space-x-2 mb-8 group cursor-pointer"
+            >
               <div className="w-12 h-12 flex items-center justify-center rounded-sm">
                 <img
                   src="/logos/geometric_mark.png"

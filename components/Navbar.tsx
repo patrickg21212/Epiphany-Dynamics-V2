@@ -44,13 +44,16 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
-        isScrolled ? 'bg-black/90 backdrop-blur-md py-3 shadow-xl' : 'bg-transparent py-6'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${isScrolled ? 'bg-black/90 backdrop-blur-md py-3 shadow-xl' : 'bg-transparent py-6'
+        }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center space-x-2 group cursor-pointer">
+        <Link
+          to="/"
+          onClick={() => window.scrollTo(0, 0)}
+          className="flex items-center space-x-2 group cursor-pointer"
+        >
           <div className="w-14 h-14 flex items-center justify-center rounded-sm transition-transform duration-500 group-hover:rotate-[360deg]">
             <img
               src="/logos/geometric_mark.png"
