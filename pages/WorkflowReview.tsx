@@ -5,10 +5,7 @@ import TextAreaField from '../components/ui/TextAreaField';
 import InputField from '../components/ui/InputField';
 
 const WorkflowReview: React.FC = () => {
-  const [submitted, setSubmitted] = useState(() => {
-    const saved = localStorage.getItem('workflowReviewSubmitted');
-    return saved === 'true';
-  });
+  const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [formData, setFormData] = useState(() => {
@@ -28,10 +25,6 @@ const WorkflowReview: React.FC = () => {
       email: '',
     };
   });
-
-  useEffect(() => {
-    localStorage.setItem('workflowReviewSubmitted', String(submitted));
-  }, [submitted]);
 
   useEffect(() => {
     localStorage.setItem('workflowReviewData', JSON.stringify(formData));
@@ -158,6 +151,10 @@ const WorkflowReview: React.FC = () => {
 
       // Show confirmation state only on success
       setSubmitted(true);
+
+      // Clear saved form data so a refresh or return visit starts fresh
+      localStorage.removeItem('workflowReviewData');
+
       // Scroll to top to ensure message is seen
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
@@ -166,6 +163,18 @@ const WorkflowReview: React.FC = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleStartOver = () => {
+    setSubmitted(false);
+    setFormData({
+      industry: '',
+      main_problem: '',
+      monthly_leads: '',
+      breakdown_cost: '',
+      email: '',
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleChange = (field: string, value: string) => {
@@ -264,14 +273,22 @@ const WorkflowReview: React.FC = () => {
               If you have 2 minutes, answer a few questions so we can make your workflow review more
               useful. If you’re busy, you can skip this.
             </p>
-            <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdV-Iet3PQKHFchj-qFNeIn_BVvrQS0mudOOfsDFdFvOFoXIg/viewform"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-6 py-3 bg-zinc-800 text-white font-medium rounded-full hover:bg-zinc-700 transition-colors text-sm border border-zinc-700"
-            >
-              Complete Optional Pre-Call Intake
-            </a>
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdV-Iet3PQKHFchj-qFNeIn_BVvrQS0mudOOfsDFdFvOFoXIg/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-6 py-3 bg-zinc-800 text-white font-medium rounded-full hover:bg-zinc-700 transition-colors text-sm border border-zinc-700"
+              >
+                Complete Optional Pre-Call Intake
+              </a>
+              <button
+                onClick={handleStartOver}
+                className="inline-block px-6 py-3 bg-transparent text-gray-400 font-medium rounded-full hover:text-white hover:bg-zinc-800/50 transition-colors text-sm border border-transparent hover:border-zinc-800"
+              >
+                Start Over
+              </button>
+            </div>
           </div>
         </div>
       </div>
