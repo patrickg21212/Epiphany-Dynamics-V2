@@ -61,10 +61,10 @@ const Stats: React.FC = () => {
   return (
     <div className="container mx-auto px-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <StatCounter end={12} suffix="+" title="Systems Deployed" />
-        <StatCounter end={28} suffix="+" title="Automations in Production" />
-        <StatCounter end={60} suffix="+" title="Workflows Orchestrated" />
-        <StatCounter end={15} suffix="+" title="Integrations Supported" />
+        <StatCounter end={14} suffix="+" title="Architectures Ready" />
+        <StatCounter end={45} suffix="+" title="Workflow Modules" />
+        <StatCounter end={120} suffix="+" title="Workflows Orchestrated" />
+        <StatCounter end={500} suffix="+" title="Integrations Supported" />
       </div>
     </div>
   );

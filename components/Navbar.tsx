@@ -44,9 +44,8 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
-        isScrolled ? 'bg-black/90 backdrop-blur-md py-3 shadow-xl' : 'bg-transparent py-6'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${isScrolled ? 'bg-black/90 backdrop-blur-md py-3 shadow-xl' : 'bg-transparent py-6'
+        }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
@@ -85,9 +84,9 @@ const Navbar: React.FC = () => {
           <button
             onClick={() => {
               if (location.pathname === '/') {
-                document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
               } else {
-                navigate('/#solutions');
+                navigate('/#contact');
               }
             }}
             className="bg-white text-black text-sm font-bold px-6 py-2.5 rounded-full hover:bg-cyan-400 transition-all active:scale-95 duration-200"
@@ -139,9 +138,9 @@ const Navbar: React.FC = () => {
             onClick={() => {
               setIsMenuOpen(false);
               if (location.pathname === '/') {
-                document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
               } else {
-                navigate('/#solutions');
+                navigate('/#contact');
               }
             }}
             className="w-full bg-white text-black font-bold py-4 rounded-full"

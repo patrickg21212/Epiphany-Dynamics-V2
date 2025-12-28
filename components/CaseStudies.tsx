@@ -8,9 +8,9 @@ const CaseStudies: React.FC = () => {
       problem:
         'A logistics provider faced a backlog of thousands of unorganized shipping documents, causing inventory delays.',
       system:
-        'We deployed a multi-modal agent workflow to classify documents, extract line-item data, and reconcile it with the ERP.',
+        'We deploy multi-modal agent workflows to classify documents, extract line-item data, and reconcile it with the ERP.',
       outcome:
-        'Eliminated the backlog in 48 hours and reduced ongoing manual data entry by over 80%.',
+        'Designed to eliminate processing backlogs within 48 hours and reduce manual data entry by over 80%.',
       image: '/images/supply-chain.png',
     },
     {
@@ -19,9 +19,9 @@ const CaseStudies: React.FC = () => {
       problem:
         'A high-growth service agency struggled to maintain response times during peak ticket volume.',
       system:
-        'We implemented a RAG-enabled support agent connected to Slack and Zendesk to draft responses and triage issues.',
+        'We implement RAG-enabled support agents connected to Slack and Zendesk to draft responses and triage issues.',
       outcome:
-        'Cut average first-response time from 4 hours to under 10 minutes without adding headcount.',
+        'Targeting first-response time reduction from hours to under 10 minutes without adding headcount.',
       image: '/images/customer-support.png',
     },
     {
@@ -30,9 +30,9 @@ const CaseStudies: React.FC = () => {
       problem:
         'Manual compilation of weekly regulatory reports was prone to human error and consumed valuable analyst hours.',
       system:
-        'We built a secure, audit-ready data pipeline to aggregate, validate, and format reports automatically.',
+        'We build secure, audit-ready data pipelines to aggregate, validate, and format reports automatically.',
       outcome:
-        'Replaced 15 hours of weekly manual spreadsheet work with a 100% reliable automated process.',
+        'Replaces 15+ hours of weekly manual spreadsheet work with a 100% reliable automated process.',
       image: '/images/financial-reporting.png',
     },
   ];
@@ -41,8 +41,8 @@ const CaseStudies: React.FC = () => {
     <div className="container mx-auto px-6">
       <div className="flex flex-col md:flex-row items-end justify-between mb-16">
         <div className="max-w-2xl">
-          <p className="text-cyan-500 font-bold tracking-widest text-sm mb-4">PROVEN RESULTS</p>
-          <h2 className="text-5xl font-bold tracking-tight">Real-World Operational Impact</h2>
+          <p className="text-cyan-500 font-bold tracking-widest text-sm mb-4">SYSTEM CAPABILITIES</p>
+          <h2 className="text-5xl font-bold tracking-tight">High-Impact Use Cases</h2>
         </div>
       </div>
 
@@ -72,13 +72,13 @@ const CaseStudies: React.FC = () => {
               </div>
               <div>
                 <span className="text-white font-bold text-xs uppercase tracking-wider block mb-1">
-                  System Built
+                  The Solution
                 </span>
                 <p className="text-gray-400 text-sm font-poppins leading-relaxed">{s.system}</p>
               </div>
               <div className="pt-2 border-t border-zinc-800">
                 <span className="text-cyan-500 font-bold text-xs uppercase tracking-wider block mb-1">
-                  Outcome
+                  Projected Impact
                 </span>
                 <p className="text-white text-sm font-poppins leading-relaxed">{s.outcome}</p>
               </div>

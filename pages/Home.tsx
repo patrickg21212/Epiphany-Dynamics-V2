@@ -57,6 +57,26 @@ const Home: React.FC = () => {
         <CaseStudies />
       </section>
 
+      <section className="py-24 bg-black border-t border-zinc-900">
+        <div className="container mx-auto px-6">
+          <div className="p-12 bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 rounded-[2rem] flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="max-w-xl">
+              <h4 className="text-3xl font-bold mb-4 text-white">Ready to Automate Real Work with AI?</h4>
+              <p className="text-gray-400 font-poppins">
+                We design and deploy custom AI automations and agent workflows tailored to your existing
+                tools, data, and processes.
+              </p>
+            </div>
+            <button
+              onClick={() => navigate('/workflow-review')}
+              className="px-12 py-5 bg-cyan-500 text-black font-black rounded-full hover:bg-white transition-all shadow-lg active:scale-95 whitespace-nowrap"
+            >
+              Request a Workflow Review
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Sticky Call to Action for Mobile */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-black/80 backdrop-blur-lg border-t border-zinc-800 z-50">
         <button

@@ -115,11 +115,10 @@ const Solutions: React.FC = () => {
           <button
             key={cat.id}
             onClick={() => setActiveCat(cat.id)}
-            className={`px-8 py-4 rounded-full text-sm font-bold tracking-wider transition-all border ${
-              activeCat === cat.id
-                ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.15)]'
-                : 'bg-transparent text-gray-400 border-zinc-800 hover:border-zinc-600'
-            }`}
+            className={`px-8 py-4 rounded-full text-sm font-bold tracking-wider transition-all border ${activeCat === cat.id
+              ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.15)]'
+              : 'bg-transparent text-gray-400 border-zinc-800 hover:border-zinc-600'
+              }`}
           >
             <span className="mr-2">{cat.icon}</span>
             {cat.name.toUpperCase()}
@@ -161,21 +160,7 @@ const Solutions: React.FC = () => {
         ))}
       </div>
 
-      <div className="mt-20 p-12 bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 rounded-[2rem] flex flex-col lg:flex-row items-center justify-between gap-8">
-        <div className="max-w-xl">
-          <h4 className="text-3xl font-bold mb-4">Ready to Automate Real Work with AI?</h4>
-          <p className="text-gray-400 font-poppins">
-            We design and deploy custom AI automations and agent workflows tailored to your existing
-            tools, data, and processes.
-          </p>
-        </div>
-        <button
-          onClick={() => navigate('/workflow-review')}
-          className="px-12 py-5 bg-cyan-500 text-black font-black rounded-full hover:bg-white transition-all shadow-lg active:scale-95 whitespace-nowrap"
-        >
-          Request a Workflow Review
-        </button>
-      </div>
+
     </div>
   );
 };
