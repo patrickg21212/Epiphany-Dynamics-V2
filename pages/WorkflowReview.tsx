@@ -26,6 +26,12 @@ const WorkflowReview: React.FC = () => {
     };
   });
 
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     localStorage.setItem('workflowReviewData', JSON.stringify(formData));
   }, [formData]);
@@ -399,9 +405,8 @@ const WorkflowReview: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 ${
-              isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-cyan-400 active:scale-95'
-            }`}
+            className={`w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-cyan-400 active:scale-95'
+              }`}
           >
             {isSubmitting ? 'Submitting...' : 'Continue'}
           </button>
