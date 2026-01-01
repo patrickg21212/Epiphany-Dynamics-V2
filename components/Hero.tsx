@@ -105,7 +105,7 @@ const Hero: React.FC = () => {
             {/* The Stylized '1' / Bolt Logo from description */}
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-3xl opacity-50 animate-pulse"></div>
             <div
-              className="relative z-10 w-full h-full p-12 flex items-center justify-center group overflow-hidden"
+              className="relative z-10 w-full h-full p-12 flex items-center justify-center group overflow-hidden mobile-symbol-container"
               style={{ isolation: 'isolate' }}
             >
               <svg
@@ -129,9 +129,9 @@ const Hero: React.FC = () => {
                 <circle cx="185" cy="100" r="2" fill="cyan" className="animate-ping delay-700" />
               </svg>
 
-              {/* Static Fallback / Mobile Image */}
+              {/* Static Fallback / Mobile Image - Optimized WebP */}
               <img
-                src="/logos/3d_lightbulb_placeholder.png"
+                src="/logos/3d_lightbulb.webp"
                 alt="Epiphany Dynamics 3D Symbol Placeholder"
                 width={512}
                 height={512}

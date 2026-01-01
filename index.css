@@ -11,15 +11,19 @@
     0% {
       transform: translateX(0);
     }
+
     100% {
       transform: translateX(-50%);
     }
   }
 
   @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translateY(0);
     }
+
     50% {
       transform: translateY(-20px);
     }
@@ -34,6 +38,7 @@
   font-display: optional;
   src: url('./src/assets/fonts/LeagueSpartan-300.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'League Spartan';
   font-style: normal;
@@ -41,6 +46,7 @@
   font-display: optional;
   src: url('./src/assets/fonts/LeagueSpartan-400.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'League Spartan';
   font-style: normal;
@@ -48,6 +54,7 @@
   font-display: optional;
   src: url('./src/assets/fonts/LeagueSpartan-500.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'League Spartan';
   font-style: normal;
@@ -63,6 +70,7 @@
   font-display: optional;
   src: url('./src/assets/fonts/Poppins-300.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
@@ -70,6 +78,7 @@
   font-display: optional;
   src: url('./src/assets/fonts/Poppins-400.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
@@ -77,6 +86,7 @@
   font-display: optional;
   src: url('./src/assets/fonts/Poppins-500.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
@@ -126,4 +136,10 @@ body {
 
 .text-glow-white {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .mobile-symbol-container {
+    background: transparent !important;
+  }
 }
