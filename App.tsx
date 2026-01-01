@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Chatbot from './src/components/ui/Chatbot';
 
 // Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -30,6 +31,7 @@ const App: React.FC = () => {
           </Routes>
         </Suspense>
         <Footer />
+        <Chatbot />
       </div>
     </Router>
   );
