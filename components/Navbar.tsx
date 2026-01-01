@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
         >
           <div className="w-14 h-14 flex items-center justify-center rounded-sm transition-transform duration-500 group-hover:rotate-[360deg]">
             <img
-              src="/logos/geometric_mark.png"
+              src="/logos/new_geometric_mark.png"
               alt="Epiphany Dynamics Logo"
               className="w-full h-full object-contain mix-blend-screen"
             />

@@ -1,10 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Hero: React.FC = () => {
   const navigate = useNavigate();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    // Mobile Check
+    const checkMobile = () => {
+      // Check if width is < 768 or if connection is slow (if supported)
+      const isSmallScreen = window.innerWidth < 768;
+      // @ts-ignore - navigator.connection is standard but TS might miss it
+      const isSlowConnection = navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType === '2g' || navigator.connection.effectiveType === '3g');
+
+      setIsMobile(isSmallScreen || isSlowConnection);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    // Intersection Observer for GPU Efficiency
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+    }
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    // Lazy load the 3D model if not mobile
+    if (!isMobile) {
+      const img = new Image();
+      img.src = '/logos/3d_lightbulb.svg';
+      img.onload = () => {
+        setIsLoaded(true);
+      };
+    }
+  }, [isMobile]);
+
   return (
-    <section className="relative min-h-[90vh] flex items-center pt-24 overflow-hidden">
+    <section ref={heroRef} className="relative min-h-[90vh] flex items-center pt-24 overflow-hidden">
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-1/4 -left-20 w-96 h-96 bg-cyan-900/20 rounded-full blur-[120px] animate-pulse"></div>
@@ -29,6 +77,7 @@ const Hero: React.FC = () => {
             </span>
             <span>Intelligence Redefined</span>
           </div>
+          {/* Headline - prioritized by virtue of being static HTML */}
           <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tighter mb-8 text-glow-white">
             Design, Deploy, and Scale{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-zinc-500">
@@ -55,7 +104,10 @@ const Hero: React.FC = () => {
           <div className="relative w-full max-w-md aspect-square">
             {/* The Stylized '1' / Bolt Logo from description */}
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-3xl opacity-50 animate-pulse"></div>
-            <div className="relative z-10 w-full h-full p-12 flex items-center justify-center group overflow-hidden">
+            <div
+              className="relative z-10 w-full h-full p-12 flex items-center justify-center group overflow-hidden"
+              style={{ isolation: 'isolate' }}
+            >
               <svg
                 viewBox="0 0 200 200"
                 className="absolute inset-0 w-full h-full drop-shadow-[0_0_30px_rgba(255,255,255,0.4)] pointer-events-none"
@@ -76,11 +128,27 @@ const Hero: React.FC = () => {
                 <circle cx="15" cy="100" r="2" fill="white" className="animate-ping delay-300" />
                 <circle cx="185" cy="100" r="2" fill="cyan" className="animate-ping delay-700" />
               </svg>
+
+              {/* Static Fallback / Mobile Image */}
               <img
-                src="/logos/geometric_mark_final_transparent.png"
-                alt="Epiphany Dynamics Geometric Mark"
-                className="relative z-10 w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.4)]"
+                src="/logos/3d_lightbulb_placeholder.png"
+                alt="Epiphany Dynamics 3D Symbol Placeholder"
+                width={512}
+                height={512}
+                className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 ${isLoaded && !isMobile ? 'opacity-0' : 'opacity-100'} ${isInView ? 'animate-float' : ''}`}
+                loading="eager"
               />
+
+              {/* Heavy 3D SVG - Only loads if not mobile */}
+              {!isMobile && (
+                <img
+                  src="/logos/3d_lightbulb.svg"
+                  alt="Epiphany Dynamics 3D Symbol"
+                  width={512}
+                  height={512}
+                  className={`relative z-10 w-full h-full object-contain transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${isInView ? 'animate-float' : ''}`}
+                />
+              )}
             </div>
 
             {/* Animated float items */}
