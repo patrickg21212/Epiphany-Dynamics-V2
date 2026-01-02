@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
+import Turnstile from 'react-turnstile';
 
 // Lazy load form components
 const SelectField = lazy(() => import('../components/ui/SelectField'));
@@ -8,9 +9,11 @@ const InputField = lazy(() => import('../components/ui/InputField'));
 import SEO from '../src/components/SEO';
 
 const WorkflowReview: React.FC = () => {
+  const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem('workflowReviewData');
     if (saved) {
@@ -28,7 +31,6 @@ const WorkflowReview: React.FC = () => {
       email: '',
     };
   });
-
 
   // Scroll to top on mount
   useEffect(() => {
@@ -85,19 +87,17 @@ const WorkflowReview: React.FC = () => {
     }
   }, [submitted]);
 
+  const handleContinue = (e: React.FormEvent) => {
+    e.preventDefault();
+    setStep(2);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Hard Fix: Read values directly from the form element to ensure no state de-sync
-    const form = e.currentTarget;
-    const formElements = new FormData(form);
-
-    // Explicitly extract values with fallbacks to state
-    const rawEmail = formElements.get('email') as string;
-    const stateEmail = formData.email;
-
-    // Use the first non-empty value found
-    const email = rawEmail && rawEmail.trim() !== '' ? rawEmail.trim() : stateEmail.trim();
+    // Use state data since the form is now split and FormData might miss hidden fields if not rendered
+    const email = formData.email;
 
     // Anti-Spam Check: If honeypot field is filled, pretend success but do nothing
     if (honeypot) {
@@ -107,22 +107,22 @@ const WorkflowReview: React.FC = () => {
       return;
     }
 
-    const industry = (formElements.get('industry') as string) || formData.industry;
-    const main_problem = (formElements.get('main_problem') as string) || formData.main_problem;
-    const monthly_leads = (formElements.get('monthly_leads') as string) || formData.monthly_leads;
-    const breakdown_cost =
-      (formElements.get('breakdown_cost') as string) || formData.breakdown_cost;
+    if (!turnstileToken) {
+      setSubmissionError('Please verify you are human.');
+      return;
+    }
 
     // Prepare payload for Make.com webhook
     const payload = {
       source: 'epiphanydynamics-antigravity-staging',
       submitted_at: new Date().toISOString(),
       page_url: window.location.href,
-      email: email, // Explicitly mapped
-      industry: industry,
-      main_problem: main_problem,
-      monthly_leads: monthly_leads,
-      breakdown_cost: breakdown_cost,
+      email: email,
+      industry: formData.industry,
+      main_problem: formData.main_problem,
+      monthly_leads: formData.monthly_leads,
+      breakdown_cost: formData.breakdown_cost,
+      turnstile_token: turnstileToken,
     };
 
     // Debug logging to verify payload matches requirements
@@ -176,6 +176,7 @@ const WorkflowReview: React.FC = () => {
 
   const handleStartOver = () => {
     setSubmitted(false);
+    setStep(1);
     setFormData({
       industry: '',
       main_problem: '',
@@ -325,83 +326,131 @@ const WorkflowReview: React.FC = () => {
         </div>
 
         <form
-          onSubmit={handleSubmit}
+          onSubmit={step === 1 ? handleContinue : handleSubmit}
           className="space-y-8 p-8 border border-zinc-800 rounded-3xl bg-zinc-900/20"
         >
           <Suspense fallback={<div className="text-gray-400 text-center py-8">Loading form...</div>}>
-            {/* Question 1: Industry */}
-            <SelectField
-              label="Which industry best describes your business?"
-              name="industry"
-              required
-              value={formData.industry}
-              onChange={handleInputChange}
-              options={[
-                'Home Services (HVAC, Plumbing, Solar, etc.)',
-                'Construction / General Contracting',
-                'Professional Services',
-                'Real Estate / Property Management',
-                'Marketing Agency',
-                'Other',
-              ]}
-            />
+            {step === 1 && (
+              <div className="space-y-8 animate-fadeIn">
+                {/* Question 1: Industry */}
+                <SelectField
+                  label="Which industry best describes your business?"
+                  name="industry"
+                  required
+                  value={formData.industry}
+                  onChange={handleInputChange}
+                  options={[
+                    'Home Services (HVAC, Plumbing, Solar, etc.)',
+                    'Construction / General Contracting',
+                    'Professional Services',
+                    'Real Estate / Property Management',
+                    'Marketing Agency',
+                    'Other',
+                  ]}
+                />
 
-            {/* Question 2: Main Problem */}
-            <RadioGroup
-              label="What’s the main problem you’re trying to fix right now?"
-              name="main_problem"
-              required
-              value={formData.main_problem}
-              onChange={handleInputChange}
-              options={[
-                'Leads aren’t followed up fast enough',
-                'Missed calls or inquiries slipping through',
-                'Too much manual admin work',
-                'No clear system to track leads',
-                'Other',
-              ]}
-            />
+                {/* Question 2: Main Problem */}
+                <RadioGroup
+                  label="What’s the main problem you’re trying to fix right now?"
+                  name="main_problem"
+                  required
+                  value={formData.main_problem}
+                  onChange={handleInputChange}
+                  options={[
+                    'Leads aren’t followed up fast enough',
+                    'Missed calls or inquiries slipping through',
+                    'Too much manual admin work',
+                    'No clear system to track leads',
+                    'Other',
+                  ]}
+                />
 
-            {/* Question 3: Leads per Month */}
-            <RadioGroup
-              label="About how many new leads do you get per month?"
-              name="monthly_leads"
-              required
-              value={formData.monthly_leads}
-              onChange={handleInputChange}
-              layout="grid"
-              options={['Fewer than 10', '10–30', '30–75', '75+', 'Not sure']}
-            />
+                {/* Question 3: Leads per Month */}
+                <RadioGroup
+                  label="About how many new leads do you get per month?"
+                  name="monthly_leads"
+                  required
+                  value={formData.monthly_leads}
+                  onChange={handleInputChange}
+                  layout="grid"
+                  options={['Fewer than 10', '10–30', '30–75', '75+', 'Not sure']}
+                />
 
-            {/* Question 4: Breaking Down */}
-            <TextAreaField
-              label="What’s currently breaking down or costing you the most time or money?"
-              name="breakdown_cost"
-              required
-              placeholder="Briefly describe the bottleneck..."
-              value={formData.breakdown_cost}
-              onChange={handleInputChange}
-              onBlur={(e) => trackStepCompletion(e.target.name, e.target.value)}
-            />
+                {/* Question 4: Breaking Down */}
+                <TextAreaField
+                  label="What’s currently breaking down or costing you the most time or money?"
+                  name="breakdown_cost"
+                  required
+                  placeholder="Briefly describe the bottleneck..."
+                  value={formData.breakdown_cost}
+                  onChange={handleInputChange}
+                  onBlur={(e) => trackStepCompletion(e.target.name, e.target.value)}
+                />
 
-            {/* New Question: Email */}
-            <InputField
-              label="Email (so we can send your booking details)"
-              name="email"
-              type="email"
-              required
-              placeholder="name@company.com"
-              value={formData.email}
-              onChange={handleInputChange}
-              onBlur={(e) => trackStepCompletion(e.target.name, e.target.value)}
-            />
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 hover:bg-cyan-400 active:scale-95"
+                >
+                  Continue
+                </button>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div className="space-y-8 animate-fadeIn">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="text-gray-400 hover:text-white mb-4 flex items-center gap-2 text-sm"
+                >
+                  ← Back to questions
+                </button>
+
+                <h3 className="text-2xl font-bold text-white mb-6">Last step: Where should we send the details?</h3>
+
+                {/* New Question: Email */}
+                <InputField
+                  label="Email (so we can send your booking details)"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="name@company.com"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  onBlur={(e) => trackStepCompletion(e.target.name, e.target.value)}
+                />
+
+                {/* Turnstile is now only in Step 2 */}
+                <div className="flex justify-center my-4">
+                  <Turnstile
+                    sitekey={import.meta.env.VITE_TURNSTILE_SITEKEY || '1x00000000000000000000AA'}
+                    onVerify={(token) => setTurnstileToken(token)}
+                    onError={() => setTurnstileToken(null)}
+                    onExpire={() => setTurnstileToken(null)}
+                    theme="dark"
+                  />
+                </div>
+
+                {submissionError && (
+                  <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-200 text-center">
+                    {submissionError}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting || !turnstileToken}
+                  className={`w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 ${
+                    isSubmitting || !turnstileToken
+                      ? 'opacity-50 cursor-not-allowed'
+                      : 'hover:bg-cyan-400 active:scale-95'
+                  }`}
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Request'}
+                </button>
+              </div>
+            )}
           </Suspense>
-
-          {submissionError && (
-            <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-200 text-center">
-              {submissionError}
-            </div>
-          )}
 
           {/* Honeypot Field - Hidden */}
           <div className="hidden">
@@ -414,15 +463,6 @@ const WorkflowReview: React.FC = () => {
               autoComplete="off"
             />
           </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-cyan-400 active:scale-95'
-              }`}
-          >
-            {isSubmitting ? 'Submitting...' : 'Continue'}
-          </button>
         </form>
       </div>
     </div>
