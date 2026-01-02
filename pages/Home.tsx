@@ -66,10 +66,12 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="p-12 bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 rounded-[2rem] flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="max-w-xl">
-              <h4 className="text-3xl font-bold mb-4 text-white">Ready to Automate Real Work with AI?</h4>
+              <h4 className="text-3xl font-bold mb-4 text-white">
+                Ready to Automate Real Work with AI?
+              </h4>
               <p className="text-gray-400 font-poppins">
-                We design and deploy custom AI automations and agent workflows tailored to your existing
-                tools, data, and processes.
+                We design and deploy custom AI automations and agent workflows tailored to your
+                existing tools, data, and processes.
               </p>
             </div>
             <button
