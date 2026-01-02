@@ -58,6 +58,8 @@ const Navbar: React.FC = () => {
             <img
               src="/logos/new_geometric_mark.png"
               alt="Epiphany Dynamics Logo"
+              width="56"
+              height="56"
               className="w-full h-full object-contain mix-blend-screen"
             />
           </div>

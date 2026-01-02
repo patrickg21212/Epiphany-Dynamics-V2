@@ -16,6 +16,8 @@ const Footer: React.FC = () => {
                 <img
                   src="/logos/new_geometric_mark.png"
                   alt="Epiphany Dynamics Logo"
+                  width="48"
+                  height="48"
                   className="w-full h-full object-contain mix-blend-screen"
                 />
               </div>

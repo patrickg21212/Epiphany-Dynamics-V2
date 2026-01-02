@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import SelectField from '../components/ui/SelectField';
-import RadioGroup from '../components/ui/RadioGroup';
-import TextAreaField from '../components/ui/TextAreaField';
-import InputField from '../components/ui/InputField';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { logEvent } from '../src/lib/analytics';
+import SEO from '../src/components/SEO';
+
+const SelectField = lazy(() => import('../components/ui/SelectField'));
+const RadioGroup = lazy(() => import('../components/ui/RadioGroup'));
+const TextAreaField = lazy(() => import('../components/ui/TextAreaField'));
+const InputField = lazy(() => import('../components/ui/InputField'));
 
 const WorkflowReview: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -146,14 +149,17 @@ const WorkflowReview: React.FC = () => {
         throw new Error(`Submission failed with status: ${response.status}`);
       }
 
-      // GA4 Tracking: Lead Generated
-      if ((window as any).gtag) {
-        (window as any).gtag('event', 'lead_generated', {
-          event_category: 'Workflow Review',
-          event_label: 'Submission Success',
-          value: 1,
-        });
-      }
+      // GA4 Tracking: Lead Generated and Custom Conversion
+      logEvent('lead_generated', {
+        event_category: 'Workflow Review',
+        event_label: 'Submission Success',
+        value: 1,
+      });
+
+      logEvent('lead_conversion_complete', {
+        event_category: 'Workflow Review',
+        event_label: 'Webhook Success',
+      });
 
       // Show confirmation state only on success
       setSubmitted(true);
@@ -204,8 +210,8 @@ const WorkflowReview: React.FC = () => {
   };
 
   const trackStepCompletion = (stepName: string, stepValue: string) => {
-    if ((window as any).gtag && stepValue) {
-      (window as any).gtag('event', 'step_complete', {
+    if (stepValue) {
+      logEvent('step_complete', {
         step_name: stepName,
         step_value: stepValue,
       });
@@ -215,6 +221,11 @@ const WorkflowReview: React.FC = () => {
   if (submitted) {
     return (
       <div className="pt-32 pb-24 bg-black min-h-screen">
+        <SEO
+          title="Submission Successful"
+          description="Thank you for your interest. Please schedule your workflow review call."
+          canonical="https://epiphanydynamics.com/workflow-review"
+        />
         <div className="container mx-auto px-6 max-w-4xl text-center animate-fadeIn">
           <div className="p-8 border border-zinc-800 rounded-3xl bg-zinc-900/30 mb-8 max-w-2xl mx-auto">
             <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -303,6 +314,11 @@ const WorkflowReview: React.FC = () => {
 
   return (
     <div className="pt-32 pb-24 bg-black min-h-screen">
+      <SEO
+        title="Request a Workflow Review"
+        description="Answer a few questions so we can prepare and make the review useful."
+        canonical="https://epiphanydynamics.com/workflow-review"
+      />
       <div className="container mx-auto px-6 max-w-2xl">
         <div className="text-center mb-10">
           <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">
@@ -317,72 +333,74 @@ const WorkflowReview: React.FC = () => {
           onSubmit={handleSubmit}
           className="space-y-8 p-8 border border-zinc-800 rounded-3xl bg-zinc-900/20"
         >
-          {/* Question 1: Industry */}
-          <SelectField
-            label="Which industry best describes your business?"
-            name="industry"
-            required
-            value={formData.industry}
-            onChange={handleInputChange}
-            options={[
-              'Home Services (HVAC, Plumbing, Solar, etc.)',
-              'Construction / General Contracting',
-              'Professional Services',
-              'Real Estate / Property Management',
-              'Marketing Agency',
-              'Other',
-            ]}
-          />
+          <Suspense fallback={<div className="h-20 bg-zinc-900/50 rounded animate-pulse" />}>
+            {/* Question 1: Industry */}
+            <SelectField
+              label="Which industry best describes your business?"
+              name="industry"
+              required
+              value={formData.industry}
+              onChange={handleInputChange}
+              options={[
+                'Home Services (HVAC, Plumbing, Solar, etc.)',
+                'Construction / General Contracting',
+                'Professional Services',
+                'Real Estate / Property Management',
+                'Marketing Agency',
+                'Other',
+              ]}
+            />
 
-          {/* Question 2: Main Problem */}
-          <RadioGroup
-            label="What’s the main problem you’re trying to fix right now?"
-            name="main_problem"
-            required
-            value={formData.main_problem}
-            onChange={handleInputChange}
-            options={[
-              'Leads aren’t followed up fast enough',
-              'Missed calls or inquiries slipping through',
-              'Too much manual admin work',
-              'No clear system to track leads',
-              'Other',
-            ]}
-          />
+            {/* Question 2: Main Problem */}
+            <RadioGroup
+              label="What’s the main problem you’re trying to fix right now?"
+              name="main_problem"
+              required
+              value={formData.main_problem}
+              onChange={handleInputChange}
+              options={[
+                'Leads aren’t followed up fast enough',
+                'Missed calls or inquiries slipping through',
+                'Too much manual admin work',
+                'No clear system to track leads',
+                'Other',
+              ]}
+            />
 
-          {/* Question 3: Leads per Month */}
-          <RadioGroup
-            label="About how many new leads do you get per month?"
-            name="monthly_leads"
-            required
-            value={formData.monthly_leads}
-            onChange={handleInputChange}
-            layout="grid"
-            options={['Fewer than 10', '10–30', '30–75', '75+', 'Not sure']}
-          />
+            {/* Question 3: Leads per Month */}
+            <RadioGroup
+              label="About how many new leads do you get per month?"
+              name="monthly_leads"
+              required
+              value={formData.monthly_leads}
+              onChange={handleInputChange}
+              layout="grid"
+              options={['Fewer than 10', '10–30', '30–75', '75+', 'Not sure']}
+            />
 
-          {/* Question 4: Breaking Down */}
-          <TextAreaField
-            label="What’s currently breaking down or costing you the most time or money?"
-            name="breakdown_cost"
-            required
-            placeholder="Briefly describe the bottleneck..."
-            value={formData.breakdown_cost}
-            onChange={handleInputChange}
-            onBlur={(e) => trackStepCompletion(e.target.name, e.target.value)}
-          />
+            {/* Question 4: Breaking Down */}
+            <TextAreaField
+              label="What’s currently breaking down or costing you the most time or money?"
+              name="breakdown_cost"
+              required
+              placeholder="Briefly describe the bottleneck..."
+              value={formData.breakdown_cost}
+              onChange={handleInputChange}
+              onBlur={(e) => trackStepCompletion(e.target.name, e.target.value)}
+            />
 
-          {/* New Question: Email */}
-          <InputField
-            label="Email (so we can send your booking details)"
-            name="email"
-            type="email"
-            required
-            placeholder="name@company.com"
-            value={formData.email}
-            onChange={handleInputChange}
-            onBlur={(e) => trackStepCompletion(e.target.name, e.target.value)}
-          />
+            {/* New Question: Email */}
+            <InputField
+              label="Email (so we can send your booking details)"
+              name="email"
+              type="email"
+              required
+              placeholder="name@company.com"
+              value={formData.email}
+              onChange={handleInputChange}
+              onBlur={(e) => trackStepCompletion(e.target.name, e.target.value)}
+            />
+          </Suspense>
 
           {submissionError && (
             <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-200 text-center">
