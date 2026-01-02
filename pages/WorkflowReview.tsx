@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Turnstile from 'react-turnstile';
 import SelectField from '../components/ui/SelectField';
 import RadioGroup from '../components/ui/RadioGroup';
 import TextAreaField from '../components/ui/TextAreaField';
@@ -8,6 +9,7 @@ const WorkflowReview: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     industry: '',
     main_problem: '', // Renamed to match requirement
@@ -46,6 +48,18 @@ const WorkflowReview: React.FC = () => {
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
   };
+
+  useEffect(() => {
+    const savedData = sessionStorage.getItem('workflowReviewData');
+    if (savedData) {
+      try {
+        setFormData(JSON.parse(savedData));
+      } catch (error) {
+        console.error('Failed to parse saved form data:', error);
+        sessionStorage.removeItem('workflowReviewData');
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (submitted) {
@@ -100,6 +114,7 @@ const WorkflowReview: React.FC = () => {
       main_problem: main_problem,
       monthly_leads: monthly_leads,
       breakdown_cost: breakdown_cost,
+      turnstile_token: turnstileToken,
     };
 
     // Debug logging to verify payload matches requirements
@@ -137,6 +152,7 @@ const WorkflowReview: React.FC = () => {
 
       // Show confirmation state only on success
       setSubmitted(true);
+      sessionStorage.removeItem('workflowReviewData');
       // Scroll to top to ensure message is seen
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
@@ -148,14 +164,22 @@ const WorkflowReview: React.FC = () => {
   };
 
   const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => {
+      const newState = { ...prev, [field]: value };
+      sessionStorage.setItem('workflowReviewData', JSON.stringify(newState));
+      return newState;
+    });
   };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      const newState = { ...prev, [name]: value };
+      sessionStorage.setItem('workflowReviewData', JSON.stringify(newState));
+      return newState;
+    });
 
     // For Select and Radio inputs, we track on change immediately
     // For text inputs, we'll use onBlur instead to avoid spamming events
@@ -358,14 +382,25 @@ const WorkflowReview: React.FC = () => {
             />
           </div>
 
+          <div className="flex justify-center my-4">
+            <Turnstile
+              sitekey={import.meta.env.VITE_TURNSTILE_SITEKEY}
+              onVerify={(token) => setTurnstileToken(token)}
+              onExpire={() => setTurnstileToken(null)}
+              theme="dark"
+            />
+          </div>
+
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !turnstileToken}
             className={`w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 ${
-              isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-cyan-400 active:scale-95'
+              isSubmitting || !turnstileToken
+                ? 'opacity-50 cursor-not-allowed'
+                : 'hover:bg-cyan-400 active:scale-95'
             }`}
           >
-            {isSubmitting ? 'Submitting...' : 'Continue'}
+            {isSubmitting ? 'Submitting...' : 'Request a Workflow Review'}
           </button>
         </form>
       </div>
