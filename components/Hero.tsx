@@ -146,6 +146,7 @@ const Hero: React.FC = () => {
                   alt="Epiphany Dynamics 3D Symbol"
                   width={512}
                   height={512}
+                  loading="lazy"
                   className={`relative z-10 w-full h-full object-contain transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${isInView ? 'animate-float' : ''}`}
                 />
               )}

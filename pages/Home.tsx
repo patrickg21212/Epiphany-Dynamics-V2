@@ -6,6 +6,7 @@ import Solutions from '../components/Solutions';
 import Features from '../components/Features';
 import Stats from '../components/Stats';
 import CaseStudies from '../components/CaseStudies';
+import SEO from '../src/components/SEO';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -21,6 +22,10 @@ const Home: React.FC = () => {
 
   return (
     <main className="flex-grow">
+      <SEO
+        title="Epiphany Dynamics | Work, Reimagined"
+        description="A high-contrast, premium landing page for Epiphany Dynamics, specializing in industry-leading generative and traditional AI solutions. Features interactive tabs, infinite logo carousels, and responsive design based on modern AI enterprise aesthetics."
+      />
       <Hero />
 
       <section className="py-8 bg-black overflow-hidden">

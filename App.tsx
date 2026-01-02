@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Chatbot from './src/components/ui/Chatbot';
+import PageTracker from './src/components/PageTracker';
 
 // Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -20,6 +21,7 @@ const Loading = () => (
 const App: React.FC = () => {
   return (
     <Router>
+      <PageTracker />
       <div className="flex flex-col min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-black">
         <Navbar />
         <Suspense fallback={<Loading />}>
