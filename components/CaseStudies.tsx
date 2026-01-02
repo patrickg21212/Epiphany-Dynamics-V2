@@ -41,7 +41,9 @@ const CaseStudies: React.FC = () => {
     <div className="container mx-auto px-6">
       <div className="flex flex-col md:flex-row items-end justify-between mb-16">
         <div className="max-w-2xl">
-          <p className="text-cyan-500 font-bold tracking-widest text-sm mb-4">SYSTEM CAPABILITIES</p>
+          <p className="text-cyan-500 font-bold tracking-widest text-sm mb-4">
+            SYSTEM CAPABILITIES
+          </p>
           <h2 className="text-5xl font-bold tracking-tight">High-Impact Use Cases</h2>
         </div>
       </div>
