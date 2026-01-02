@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
+import Turnstile from 'react-turnstile';
 
 // Lazy load form components
 const SelectField = lazy(() => import('../components/ui/SelectField'));
@@ -11,6 +12,7 @@ const WorkflowReview: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem('workflowReviewData');
     if (saved) {
@@ -28,7 +30,6 @@ const WorkflowReview: React.FC = () => {
       email: '',
     };
   });
-
 
   // Scroll to top on mount
   useEffect(() => {
@@ -107,6 +108,11 @@ const WorkflowReview: React.FC = () => {
       return;
     }
 
+    if (!turnstileToken) {
+      setSubmissionError('Please verify you are human.');
+      return;
+    }
+
     const industry = (formElements.get('industry') as string) || formData.industry;
     const main_problem = (formElements.get('main_problem') as string) || formData.main_problem;
     const monthly_leads = (formElements.get('monthly_leads') as string) || formData.monthly_leads;
@@ -123,6 +129,7 @@ const WorkflowReview: React.FC = () => {
       main_problem: main_problem,
       monthly_leads: monthly_leads,
       breakdown_cost: breakdown_cost,
+      turnstile_token: turnstileToken,
     };
 
     // Debug logging to verify payload matches requirements
@@ -328,7 +335,9 @@ const WorkflowReview: React.FC = () => {
           onSubmit={handleSubmit}
           className="space-y-8 p-8 border border-zinc-800 rounded-3xl bg-zinc-900/20"
         >
-          <Suspense fallback={<div className="text-gray-400 text-center py-8">Loading form...</div>}>
+          <Suspense
+            fallback={<div className="text-gray-400 text-center py-8">Loading form...</div>}
+          >
             {/* Question 1: Industry */}
             <SelectField
               label="Which industry best describes your business?"
@@ -415,11 +424,24 @@ const WorkflowReview: React.FC = () => {
             />
           </div>
 
+          <div className="flex justify-center my-4">
+            <Turnstile
+              sitekey={import.meta.env.VITE_TURNSTILE_SITEKEY || '1x00000000000000000000AA'}
+              onVerify={(token) => setTurnstileToken(token)}
+              onError={() => setTurnstileToken(null)}
+              onExpire={() => setTurnstileToken(null)}
+              theme="dark"
+            />
+          </div>
+
           <button
             type="submit"
-            disabled={isSubmitting}
-            className={`w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-cyan-400 active:scale-95'
-              }`}
+            disabled={isSubmitting || !turnstileToken}
+            className={`w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 ${
+              isSubmitting || !turnstileToken
+                ? 'opacity-50 cursor-not-allowed'
+                : 'hover:bg-cyan-400 active:scale-95'
+            }`}
           >
             {isSubmitting ? 'Submitting...' : 'Continue'}
           </button>
