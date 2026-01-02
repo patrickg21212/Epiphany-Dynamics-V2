@@ -34,7 +34,6 @@ const SEO: React.FC<SEOProps> = ({ title, description }) => {
 
     const twitterDescription = document.querySelector('meta[property="twitter:description"]');
     if (twitterDescription) twitterDescription.setAttribute('content', description);
-
   }, [title, description]);
 
   return null;

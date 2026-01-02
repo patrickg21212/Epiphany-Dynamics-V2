@@ -44,8 +44,9 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${isScrolled ? 'bg-black/90 backdrop-blur-md py-3 shadow-xl' : 'bg-transparent py-6'
-        }`}
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+        isScrolled ? 'bg-black/90 backdrop-blur-md py-3 shadow-xl' : 'bg-transparent py-6'
+      }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}

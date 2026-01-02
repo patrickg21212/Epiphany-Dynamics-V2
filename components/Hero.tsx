@@ -13,8 +13,12 @@ const Hero: React.FC = () => {
     const checkMobile = () => {
       // Check if width is < 768 or if connection is slow (if supported)
       const isSmallScreen = window.innerWidth < 768;
-      // @ts-ignore - navigator.connection is standard but TS might miss it
-      const isSlowConnection = navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType === '2g' || navigator.connection.effectiveType === '3g');
+      const connection = (navigator as any).connection;
+      const isSlowConnection =
+        connection &&
+        (connection.saveData ||
+          connection.effectiveType === '2g' ||
+          connection.effectiveType === '3g');
 
       setIsMobile(isSmallScreen || isSlowConnection);
     };
@@ -27,7 +31,7 @@ const Hero: React.FC = () => {
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (heroRef.current) {
@@ -52,7 +56,10 @@ const Hero: React.FC = () => {
   }, [isMobile]);
 
   return (
-    <section ref={heroRef} className="relative min-h-[90vh] flex items-center pt-24 overflow-hidden">
+    <section
+      ref={heroRef}
+      className="relative min-h-[90vh] flex items-center pt-24 overflow-hidden"
+    >
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-1/4 -left-20 w-96 h-96 bg-cyan-900/20 rounded-full blur-[120px] animate-pulse"></div>

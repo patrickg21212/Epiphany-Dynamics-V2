@@ -29,7 +29,6 @@ const WorkflowReview: React.FC = () => {
     };
   });
 
-
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -328,7 +327,9 @@ const WorkflowReview: React.FC = () => {
           onSubmit={handleSubmit}
           className="space-y-8 p-8 border border-zinc-800 rounded-3xl bg-zinc-900/20"
         >
-          <Suspense fallback={<div className="text-gray-400 text-center py-8">Loading form...</div>}>
+          <Suspense
+            fallback={<div className="text-gray-400 text-center py-8">Loading form...</div>}
+          >
             {/* Question 1: Industry */}
             <SelectField
               label="Which industry best describes your business?"
@@ -418,8 +419,9 @@ const WorkflowReview: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-cyan-400 active:scale-95'
-              }`}
+            className={`w-full py-4 bg-white text-black font-bold rounded-full transition-all shadow-lg text-lg mt-4 ${
+              isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-cyan-400 active:scale-95'
+            }`}
           >
             {isSubmitting ? 'Submitting...' : 'Continue'}
           </button>

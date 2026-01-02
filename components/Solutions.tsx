@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 type SolutionItem = {
   title: string;
@@ -97,7 +96,6 @@ const categories: Category[] = [
 ];
 
 const Solutions: React.FC = () => {
-  const navigate = useNavigate();
   const [activeCat, setActiveCat] = useState(categories[0].id);
   const currentCategory = categories.find((c) => c.id === activeCat)!;
 
@@ -115,10 +113,11 @@ const Solutions: React.FC = () => {
           <button
             key={cat.id}
             onClick={() => setActiveCat(cat.id)}
-            className={`px-8 py-4 rounded-full text-sm font-bold tracking-wider transition-all border ${activeCat === cat.id
-              ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.15)]'
-              : 'bg-transparent text-gray-400 border-zinc-800 hover:border-zinc-600'
-              }`}
+            className={`px-8 py-4 rounded-full text-sm font-bold tracking-wider transition-all border ${
+              activeCat === cat.id
+                ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.15)]'
+                : 'bg-transparent text-gray-400 border-zinc-800 hover:border-zinc-600'
+            }`}
           >
             <span className="mr-2">{cat.icon}</span>
             {cat.name.toUpperCase()}
@@ -159,8 +158,6 @@ const Solutions: React.FC = () => {
           </div>
         ))}
       </div>
-
-
     </div>
   );
 };
